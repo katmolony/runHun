@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.ui.screens.ScreenRun
 import ie.setu.placemark.ui.screens.ScreenReport
+import ie.setu.placemark.ui.screens.ScreenOptions
 
 @Composable
 fun NavHostProvider(
@@ -34,9 +35,9 @@ fun NavHostProvider(
         }
         // Add option later: 9a lab 10 a
         //ui screenn for options
-        composable(route = Report.route) {
+        composable(route = Options.route) {
             //call our 'Option' Screen Here
-            ScreenReport(modifier = modifier, runs = runs)
+            ScreenOptions(modifier = modifier)
         }
     }
 }

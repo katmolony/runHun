@@ -94,12 +94,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RunHunApp(modifier: Modifier = Modifier,
-              navController: NavHostController = rememberNavController()) {
+                 navController: NavHostController = rememberNavController()) {
     val runs = remember { mutableStateListOf<RunModel>() }
-    var selectedMenuItem by remember { mutableStateOf<MenuItem?>(MenuItem.Run) }
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentNavBackStackEntry?.destination
     val currentBottomScreen =
