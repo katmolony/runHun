@@ -29,7 +29,7 @@ fun ProgressBar(modifier: Modifier = Modifier,
 
     LinearProgressIndicator(
         progress = { currentProgress as Float },
-        modifier = modifier.padding(top = 120.dp,bottom = 24.dp)
+        modifier = modifier.padding(top = 80.dp,bottom = 24.dp)
             .height(8.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp)),

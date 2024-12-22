@@ -69,6 +69,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ie.setu.placemark.ui.components.general.TopAppBarProvider
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavHostController
+import ie.setu.placemark.navigation.allDestinations
+import ie.setu.placemark.navigation.Report
+import ie.setu.placemark.navigation.NavHostProvider
+import ie.setu.placemark.ui.components.general.BottomAppBarProvider
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,22 +96,34 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RunHunApp(modifier: Modifier = Modifier) {
+fun RunHunApp(modifier: Modifier = Modifier,
+              navController: NavHostController = rememberNavController()) {
     val runs = remember { mutableStateListOf<RunModel>() }
     var selectedMenuItem by remember { mutableStateOf<MenuItem?>(MenuItem.Run) }
+    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = currentNavBackStackEntry?.destination
+    val currentBottomScreen =
+        allDestinations.find { it.route == currentDestination?.route } ?: Report
+
 
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBarProvider(selectedMenuItem,
-                onSelectedMenuItemChange = { selectedMenuItem = it })
+            TopAppBarProvider(
+                currentScreen = currentBottomScreen,
+                canNavigateBack = navController.previousBackStackEntry != null
+            ) { navController.navigateUp() }
         },
-        content = {
-            when (selectedMenuItem) {
-                MenuItem.Run -> ScreenRun(modifier = modifier, runs = runs)
-                MenuItem.Report -> ScreenReport(modifier = modifier, runs = runs)
-                else -> {}
-            }
+        content = { paddingValues ->
+            NavHostProvider(
+                modifier = modifier,
+                navController = navController,
+                paddingValues = paddingValues,
+                runs = runs)
+        },
+        bottomBar = {
+            BottomAppBarProvider(navController,
+                currentScreen = currentBottomScreen,)
         }
     )
 }

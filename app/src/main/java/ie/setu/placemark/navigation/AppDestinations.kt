@@ -3,6 +3,7 @@ package ie.setu.placemark.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.graphics.vector.ImageVector
 
 interface AppDestination {
@@ -23,5 +24,12 @@ object Run : AppDestination {
     override val route = "run"
 }
 
-val bottomAppBarDestinations = listOf(Run, Report)
-val allDestinations = listOf(Report, Run)
+object Options : AppDestination {
+    override val icon = Icons.Filled.Menu
+    override val label = "Options"
+    override val route = "options"
+}
+
+
+val bottomAppBarDestinations = listOf(Run, Report, Options)
+val allDestinations = listOf(Report, Run, Options)

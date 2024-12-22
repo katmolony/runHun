@@ -25,11 +25,17 @@ fun NavHostProvider(
         modifier = Modifier.padding(paddingValues = paddingValues)) {
 
         composable(route = Run.route) {
-            //call our 'Donate' Screen Here
+            //call our 'Run' Screen Here
             ScreenRun(modifier = modifier,runs = runs)
         }
         composable(route = Report.route) {
             //call our 'Report' Screen Here
+            ScreenReport(modifier = modifier, runs = runs)
+        }
+        // Add option later: 9a lab 10 a
+        //ui screenn for options
+        composable(route = Report.route) {
+            //call our 'Option' Screen Here
             ScreenReport(modifier = modifier, runs = runs)
         }
     }

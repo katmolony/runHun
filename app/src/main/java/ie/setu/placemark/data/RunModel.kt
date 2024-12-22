@@ -12,7 +12,7 @@ data class RunModel(val id: Int = Random.nextInt(1, 100000),
 
 val fakeRuns = List(30) { i ->
     RunModel(id = 12345 + i,
-        "PayPal $i",
+        "metre $i",
         i.toInt(),
         "Message $i",
         Date()
