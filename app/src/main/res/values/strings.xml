@@ -19,6 +19,7 @@
     <string name="enter_description">Enter description</string>
     <string name="show_less">Show Less</string>
     <string name="show_more">Show More</string>
+    <string name="empty_list">No Run Yet - Go out for one!</string>
 
 </resources>
 

@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.numberPicker)
     implementation(libs.androidx.storage)
     implementation(libs.androidx.benchmark.macro)
+    implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

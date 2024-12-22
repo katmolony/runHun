@@ -1,6 +1,5 @@
 package ie.setu.placemark.ui.components.report
 
-import android.text.format.DateFormat
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -25,10 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ie.setu.placemark.R
 import ie.setu.placemark.ui.theme.RunHunTheme
+import java.text.DateFormat
 import java.util.Date
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Business
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 
 @Composable
 fun RunCard(
@@ -43,7 +46,7 @@ fun RunCard(
         ),
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 2.dp)
     ) {
-        DonationCardContent(unitType,
+        RunCardContent(unitType,
             distanceAmount,
             message,
             dateRan)
@@ -51,11 +54,11 @@ fun RunCard(
 }
 
 @Composable
-private fun DonationCardContent(
-    paymentType: String,
-    paymentAmount: Int,
+private fun RunCardContent(
+    unitType: String,
+    distanceAmount: Int,
     message: String,
-    dateCreated: String
+    dateRan: String
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -77,25 +80,25 @@ private fun DonationCardContent(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = Icons.Filled.Business,
-                    "Donation Status",
+                    "Run Status",
                     Modifier.padding(end = 8.dp)
                 )
                 Text(
-                    text = paymentType,
+                    text = unitType,
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = "€$paymentAmount",
+                    text = "$distanceAmount",
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
             }
             Text(
-                text = "Donated $dateCreated", style = MaterialTheme.typography.labelSmall
+                text = "Date $dateRan", style = MaterialTheme.typography.labelSmall
             )
             if (expanded) {
                 Text(modifier = Modifier.padding(vertical = 16.dp), text = message)

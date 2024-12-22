@@ -29,7 +29,7 @@ import androidx.compose.ui.Alignment
 
 @Composable
 fun ScreenRun(modifier: Modifier = Modifier,
-                 distances: SnapshotStateList<RunModel>
+                 runs: SnapshotStateList<RunModel>
 ) {
 
     var unitType by remember { mutableStateOf("kilometres") }
@@ -69,10 +69,10 @@ fun ScreenRun(modifier: Modifier = Modifier,
             )
             RunButton (
                 modifier = modifier,
-                distance = RunModel(unitType = unitType,
+                run = RunModel(unitType = unitType,
                     distanceAmount = distanceAmount,
                     message = runMessage),
-                distances = distances,
+                runs = runs,
                 onTotalDistanceChange = { totalDistance = it }
             )
         }
@@ -84,6 +84,6 @@ fun ScreenRun(modifier: Modifier = Modifier,
 fun RunScreenPreview() {
     RunHunTheme {
         ScreenRun( modifier = Modifier,
-            distances = fakeRuns.toMutableStateList())
+            runs = fakeRuns.toMutableStateList())
     }
 }

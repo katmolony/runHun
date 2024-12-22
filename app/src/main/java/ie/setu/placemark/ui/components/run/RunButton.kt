@@ -38,8 +38,8 @@ import timber.log.Timber
 @Composable
 fun RunButton(
     modifier: Modifier = Modifier,
-    distance: RunModel,
-    distances: SnapshotStateList<RunModel>,
+    run: RunModel,
+    runs: SnapshotStateList<RunModel>,
     onTotalDistanceChange: (Int) -> Unit
 ) {
     var totalDistance by remember { mutableIntStateOf(0) }
@@ -47,11 +47,11 @@ fun RunButton(
     Row {
         Button(
             onClick = {
-                totalDistance+=distance.distanceAmount
+                totalDistance+=run.distanceAmount
                 onTotalDistanceChange(totalDistance)
-                distances.add(distance)
-                Timber.i("Run info : $distance")
-                Timber.i("Run List info : ${distances.toList()}")
+                runs.add(run)
+                Timber.i("Run info : $run")
+                Timber.i("Run List info : ${runs.toList()}")
 
             },
             elevation = ButtonDefaults.buttonElevation(20.dp)
@@ -100,7 +100,7 @@ fun DonateButtonPreview() {
         RunButton(
             Modifier,
             RunModel(),
-            distances = fakeRuns.toMutableStateList()
+            runs = fakeRuns.toMutableStateList()
         ) {}
     }
 }
