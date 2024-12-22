@@ -3,5 +3,22 @@
     <string name="button_addRun">Add Run</string>
     <string name="text_Title">Title</string>
     <string name="text_titleHint">Enter Title</string>
+    <string name="runTitle">Welcome Hun</string>
+    <string name="runSubtitle">How far did you run?</string>
+    <string name="runButton">Add Distance</string>
+    <string name="kilometre">kilometre</string>
+    <string name="metre">metre</string>
+    <string name="amount">Amount</string>
+    <string name="total">Total : </string>
+    <string name="totalSoFar">€%d</string>
+    <string name="limitExceeded">"A Donation of €%d will exceed Maximum Donations of €10000"</string>
+    <string name="reportTitle">Donations List</string>
+    <string name="defaultAmount">00</string>
+    <string name="defaultMethod">N/A</string>
+    <string name="defaultMessage">Go Homer!</string>
+    <string name="enter_description">Enter description</string>
+    <string name="show_less">Show Less</string>
+    <string name="show_more">Show More</string>
+
 </resources>
 

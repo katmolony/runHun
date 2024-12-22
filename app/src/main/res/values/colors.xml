@@ -13,5 +13,10 @@
     <color name="fuchsia">#FF00FF</color>
     <color name="lavenderBlush">#FFF0F5</color>
     <color name="paleVioletRed">#DB7093</color>
+
+    <color name="color_primary">#FFCDD2</color>
+    <color name="color_secondary">#E91E63</color>
+    <color name="color_tertiary">#FFB6C1</color>
+
 </resources>
 

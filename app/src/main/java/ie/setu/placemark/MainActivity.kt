@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,153 +39,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.ajalt.timberkt.Timber
-import ie.setu.placemark.models.RunModel
+//import com.github.ajalt.timberkt.Timber
+import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.ui.theme.RunHunTheme
-import timber.log.Timber.i
+//import timber.log.Timber.i
+import androidx.compose.runtime.mutableStateListOf
+import ie.setu.placemark.ui.screens.ScreenRun
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        Timber.plant(Timber.DebugTree())
-        i("RunHun MainActivity started..")
+
         setContent {
             RunHunTheme {
-                Scaffold(
+                Surface(
                     modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(id = R.string.app_name),
-                                    color = Color.White
-                                )
-                            },
-                            colors = TopAppBarDefaults.largeTopAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            ),
-                            navigationIcon = {
-                                Icon(imageVector = Icons.Filled.Menu,
-                                    contentDescription = "Menu",
-                                    tint = Color.White)
-                            }
-                        )
-                    }
-                )
-                { innerPadding ->
-                    AddRun(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    RunHunApp(modifier = Modifier)
                 }
             }
         }
     }
 }
 
-fun addRun(title: String) {
-    val run = RunModel()
+@Composable
+fun RunHunApp(modifier: Modifier = Modifier) {
+    val distances = remember { mutableStateListOf<RunModel>() }
 
-    run.title = title
-    i("Title Entered is : ${run.title}")
+    ScreenRun(modifier = modifier, distances = distances)
 }
 
-
-@Composable
-fun AddRun(modifier: Modifier = Modifier) {
-    var title by remember { mutableStateOf("") }
-    var showError by remember { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(all = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-    OutlinedTextField(
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.primary,
-            cursorColor = MaterialTheme.colorScheme.primary
-        ),
-        value = title,
-        onValueChange = {
-            title = it
-            showError = false
-        },
-        isError = showError,
-        modifier = modifier.fillMaxWidth(),
-        label = { Text(stringResource(id = R.string.text_titleHint)) },
-        trailingIcon = {
-            if (showError)
-                Icon(
-                    Icons.Filled.Warning, "error",
-                    tint = MaterialTheme.colorScheme.error
-                )
-            else
-                Icon(
-                    Icons.Default.Edit, contentDescription = "add/edit",
-                    tint = Color.Black
-                )
-        } ,
-        supportingText = { ShowSupportText(showError) }
-    )
-        Button(
-            onClick = {
-                if (title.isEmpty()) {
-                showError = true
-                } else {
-                    addRun(title)
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            elevation = ButtonDefaults.buttonElevation(20.dp)
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
-            Spacer(modifier = Modifier.width(width = 4.dp))
-            Text(stringResource(id = R.string.button_addRun))
-        }
-    }}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun AddRunPreview() {
+fun MyAppPreview() {
     RunHunTheme {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(id = R.string.app_name),
-                            color = Color.White
-                        )
-                    },
-                    colors = TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                )
-            },
-
-            )
-        { innerPadding ->
-            AddRun(
-                modifier = Modifier.padding(innerPadding)
-            )
-        }
+        RunHunApp(modifier = Modifier)
     }
-}
-
-@Composable
-fun ShowSupportText(isError : Boolean)
-{
-    if (isError)
-        Text(
-            text = "This Field is Required",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.error,
-        )
-    else Text(text = "")
 }
