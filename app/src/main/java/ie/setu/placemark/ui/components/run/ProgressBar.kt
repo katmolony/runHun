@@ -25,7 +25,7 @@ fun ProgressBar(modifier: Modifier = Modifier,
                 totalDistance: Int,) {
     var currentProgress by remember { mutableFloatStateOf(0f) }
 
-    currentProgress = totalDistance / 10000f
+    currentProgress = totalDistance / 400f
 
     LinearProgressIndicator(
         progress = { currentProgress as Float },

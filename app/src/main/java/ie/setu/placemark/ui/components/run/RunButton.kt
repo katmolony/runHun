@@ -1,5 +1,6 @@
 package ie.setu.placemark.ui.components.run
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -34,6 +35,7 @@ import androidx.compose.runtime.toMutableStateList
 import ie.setu.placemark.data.fakeRuns
 import ie.setu.placemark.ui.theme.RunHunTheme
 import timber.log.Timber
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun RunButton(
@@ -43,17 +45,23 @@ fun RunButton(
     onTotalDistanceChange: (Int) -> Unit
 ) {
     var totalDistance by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
+    val message = stringResource(R.string.limitExceeded,run.distanceAmount)
 
     Row {
         Button(
             onClick = {
+            if(totalDistance + run.distanceAmount <= 400) {
                 totalDistance+=run.distanceAmount
                 onTotalDistanceChange(totalDistance)
                 runs.add(run)
                 Timber.i("Run info : $run")
                 Timber.i("Run List info : ${runs.toList()}")
-
-            },
+            }
+            else
+                Toast.makeText(context,message,
+                    Toast.LENGTH_SHORT).show()
+    },
             elevation = ButtonDefaults.buttonElevation(20.dp)
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add Distance")

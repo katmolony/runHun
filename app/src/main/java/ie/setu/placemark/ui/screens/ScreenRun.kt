@@ -37,6 +37,8 @@ fun ScreenRun(modifier: Modifier = Modifier,
     var runMessage by remember { mutableStateOf("Go Hun!") }
     var totalDistance by remember { mutableIntStateOf(0) }
 
+    totalDistance = runs.sumOf { it.distanceAmount }
+
     Column {
         Column(
             modifier = modifier.padding(

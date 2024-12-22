@@ -68,6 +68,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ie.setu.placemark.ui.components.general.TopAppBarProvider
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,43 +96,8 @@ fun RunHunApp(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        color = Color.White
-                    )
-                },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-                actions = {
-                    if(selectedMenuItem == MenuItem.Run) {
-                        IconButton(onClick = {
-                            selectedMenuItem = MenuItem.Report
-                        }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.List,
-                                contentDescription = "Options",
-                                tint = Color.White,
-                                modifier = Modifier.size(40.dp)
-                            )
-                        }
-                    }
-                    else {
-                        IconButton(onClick = {
-                            selectedMenuItem = MenuItem.Run
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Options",
-                                tint = Color.White,
-                                modifier = Modifier.size(40.dp)
-                            )
-                        }
-                    }
-                }
-            )
+            TopAppBarProvider(selectedMenuItem,
+                onSelectedMenuItemChange = { selectedMenuItem = it })
         },
         content = {
             when (selectedMenuItem) {

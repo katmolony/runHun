@@ -10,9 +10,9 @@
     <string name="metre">metre</string>
     <string name="amount">Amount</string>
     <string name="total">Total : </string>
-    <string name="totalSoFar">€%d</string>
-    <string name="limitExceeded">"A Donation of €%d will exceed Maximum Donations of €10000"</string>
-    <string name="reportTitle">Donations List</string>
+    <string name="totalSoFar">%km</string>
+    <string name="limitExceeded">"Any more ditance could cause injury"</string>
+    <string name="reportTitle">Run List</string>
     <string name="defaultAmount">00</string>
     <string name="defaultMethod">N/A</string>
     <string name="defaultMessage">Go Homer!</string>
