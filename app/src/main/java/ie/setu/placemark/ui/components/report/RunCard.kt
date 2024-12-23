@@ -3,9 +3,11 @@ package ie.setu.placemark.ui.components.report
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
@@ -30,15 +32,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.material.icons.filled.Business
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
 
 @Composable
 fun RunCard(
     unitType: String,
     distanceAmount: Int,
     message: String,
-    dateRan: String
+    dateRan: String,
+    onClickDelete: () -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -49,7 +55,8 @@ fun RunCard(
         RunCardContent(unitType,
             distanceAmount,
             message,
-            dateRan)
+            dateRan,
+            onClickDelete)
     }
 }
 
@@ -58,7 +65,8 @@ private fun RunCardContent(
     unitType: String,
     distanceAmount: Int,
     message: String,
-    dateRan: String
+    dateRan: String,
+    onClickDelete:  () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -84,15 +92,15 @@ private fun RunCardContent(
                     Modifier.padding(end = 8.dp)
                 )
                 Text(
-                    text = unitType,
+                    text = message,
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = "$distanceAmount",
-                    style = MaterialTheme.typography.headlineMedium.copy(
+                    text = "$distanceAmount $unitType",
+                    style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
@@ -102,6 +110,16 @@ private fun RunCardContent(
             )
             if (expanded) {
                 Text(modifier = Modifier.padding(vertical = 16.dp), text = message)
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    FilledTonalButton(onClick = {}) {
+                        Text(text = "Show More...")
+                    }
+
+                    FilledTonalIconButton(onClick = onClickDelete) {
+                        Icon(Icons.Filled.Delete, "Delete Donation")
+                    }
+                }
             }
         }
         IconButton(onClick = { expanded = !expanded }) {
@@ -125,7 +143,8 @@ fun RunCardPreview() {
             unitType = "Direct",
             distanceAmount = 100,
             message = "A description of my issue...",
-            dateRan = DateFormat.getDateTimeInstance().format(Date())
+            dateRan = DateFormat.getDateTimeInstance().format(Date()),
+            onClickDelete = {}
         )
     }
 }

@@ -52,7 +52,11 @@ fun ReportScreen(modifier: Modifier = Modifier,
                 }
             else
                 RunCardList(
-                    runs = runs
+                    runs = runs,
+                    onDeleteRun = {
+                            run: RunModel
+                            -> reportViewModel.deleteRun(run)
+                    }
                 )
         }
     }
@@ -93,7 +97,8 @@ fun PreviewReportScreen(modifier: Modifier = Modifier,
                 }
             else
                 RunCardList(
-                    runs = runs
+                    runs = runs,
+                    onDeleteRun = {}
                 )
         }
     }
