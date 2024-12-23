@@ -31,22 +31,30 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.toMutableStateList
 import ie.setu.placemark.data.fakeRuns
 import ie.setu.placemark.ui.theme.RunHunTheme
 import timber.log.Timber
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import ie.setu.placemark.ui.screens.report.ReportViewModel
+import ie.setu.placemark.ui.screens.run.RunViewModel
 
 @Composable
 fun RunButton(
     modifier: Modifier = Modifier,
     run: RunModel,
-    runs: SnapshotStateList<RunModel>,
+    runViewModel: RunViewModel = hiltViewModel(),
+    reportViewModel: ReportViewModel = hiltViewModel(),
     onTotalDistanceChange: (Int) -> Unit
-) {
+)
+{
     var totalDistance by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
     val message = stringResource(R.string.limitExceeded,run.distanceAmount)
+
+    val runs = reportViewModel.uiRuns.collectAsState().value
 
     Row {
         Button(
@@ -54,7 +62,7 @@ fun RunButton(
             if(totalDistance + run.distanceAmount <= 400) {
                 totalDistance+=run.distanceAmount
                 onTotalDistanceChange(totalDistance)
-                runs.add(run)
+                runViewModel.insert(run)
                 Timber.i("Run info : $run")
                 Timber.i("Run List info : ${runs.toList()}")
             }
@@ -105,10 +113,73 @@ fun RunButton(
 @Composable
 fun DonateButtonPreview() {
     RunHunTheme {
-        RunButton(
+        PreviewRunButton(
             Modifier,
             RunModel(),
             runs = fakeRuns.toMutableStateList()
         ) {}
+    }
+}
+
+@Composable
+fun PreviewRunButton(
+    modifier: Modifier = Modifier,
+    run: RunModel,
+    runs: SnapshotStateList<RunModel>,
+    onTotalDistanceChange: (Int) -> Unit
+) {
+
+    var totalDistance= runs.sumOf { it.distanceAmount }
+    val context = LocalContext.current
+    val message = stringResource(R.string.limitExceeded,run.distanceAmount)
+
+    Row {
+        Button(
+            onClick = {
+                if(totalDistance + run.distanceAmount <= 10000) {
+                    totalDistance+=run.distanceAmount
+                    onTotalDistanceChange(totalDistance)
+                    runs.add(run)
+                    Timber.i("Run info : $run")
+                    Timber.i("Run List info : ${runs.toList()}")
+                }
+                else
+                    Toast.makeText(context,message,
+                        Toast.LENGTH_SHORT).show()
+            },
+            elevation = ButtonDefaults.buttonElevation(20.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Donate")
+            Spacer(modifier.width(width = 4.dp))
+            Text(
+                text = stringResource(R.string.runButton),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White
+            )
+        }
+        Spacer(modifier.weight(1f))
+        Text(
+            buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.Black
+                    )
+                ) {
+                    append(stringResource(R.string.total) + " €")
+                }
+
+
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.secondary)
+                ) {
+                    append(totalDistance.toString())
+                }
+            })
     }
 }

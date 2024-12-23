@@ -9,9 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ie.setu.placemark.data.RunModel
-import ie.setu.placemark.ui.screens.ScreenRun
-import ie.setu.placemark.ui.screens.ScreenReport
-import ie.setu.placemark.ui.screens.ScreenOptions
+import ie.setu.placemark.ui.screens.options.OptionsScreen
+import ie.setu.placemark.ui.screens.report.ReportScreen
+import ie.setu.placemark.ui.screens.run.RunScreen
 
 @Composable
 fun NavHostProvider(
@@ -27,17 +27,17 @@ fun NavHostProvider(
 
         composable(route = Run.route) {
             //call our 'Run' Screen Here
-            ScreenRun(modifier = modifier,runs = runs)
+            RunScreen(modifier = modifier)
         }
         composable(route = Report.route) {
             //call our 'Report' Screen Here
-            ScreenReport(modifier = modifier, runs = runs)
+            ReportScreen(modifier = modifier)
         }
         // Add option later: 9a lab 10 a
         //ui screenn for options
         composable(route = Options.route) {
             //call our 'Option' Screen Here
-            ScreenOptions(modifier = modifier)
+            OptionsScreen(modifier = modifier)
         }
     }
 }

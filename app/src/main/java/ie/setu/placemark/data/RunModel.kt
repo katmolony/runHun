@@ -1,13 +1,18 @@
 package ie.setu.placemark.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.Date
 import kotlin.random.Random
 
-data class RunModel(val id: Int = Random.nextInt(1, 100000),
-                         val unitType: String = "N/A",
-                         val distanceAmount: Int = 0,
-                         val message: String = "Go Hun!",
-                         val dateRan: Date = Date()
+@Entity
+data class RunModel(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val unitType: String = "N/A",
+    val distanceAmount: Int = 0,
+    val message: String = "Go Hun!",
+    val dateRan: Date = Date()
 )
 
 val fakeRuns = List(30) { i ->

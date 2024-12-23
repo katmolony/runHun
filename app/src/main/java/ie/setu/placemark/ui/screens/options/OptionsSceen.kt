@@ -1,4 +1,4 @@
-package ie.setu.placemark.ui.screens
+package ie.setu.placemark.ui.screens.options
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,7 +24,7 @@ import ie.setu.placemark.ui.components.general.Centre
 import ie.setu.placemark.ui.theme.RunHunTheme
 
 @Composable
-fun ScreenOptions(modifier: Modifier = Modifier) {
+fun OptionsScreen(modifier: Modifier = Modifier) {
 
     Column(
         modifier = modifier.background(MaterialTheme.colorScheme.secondary),
@@ -55,6 +55,6 @@ fun ScreenOptions(modifier: Modifier = Modifier) {
 @Composable
 fun OptionsScreenPreview() {
     RunHunTheme {
-        ScreenOptions( modifier = Modifier)
+        OptionsScreen( modifier = Modifier)
     }
 }

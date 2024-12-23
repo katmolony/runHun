@@ -1,4 +1,4 @@
-package ie.setu.placemark.ui.screens
+package ie.setu.placemark.ui.screens.run
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,17 +25,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.hilt.navigation.compose.hiltViewModel
+import ie.setu.placemark.ui.screens.report.ReportViewModel
 
 @Composable
-fun ScreenRun(modifier: Modifier = Modifier,
-                 runs: SnapshotStateList<RunModel>
-) {
+fun RunScreen(modifier: Modifier = Modifier,
+              reportViewModel: ReportViewModel = hiltViewModel())
+{
 
     var unitType by remember { mutableStateOf("kilometres") }
     var distanceAmount by remember { mutableIntStateOf(10) }
     var runMessage by remember { mutableStateOf("Go Hun!") }
     var totalDistance by remember { mutableIntStateOf(0) }
+
+    val runs = reportViewModel.uiRuns.collectAsState().value
 
     totalDistance = runs.sumOf { it.distanceAmount }
 
@@ -74,7 +79,7 @@ fun ScreenRun(modifier: Modifier = Modifier,
                 run = RunModel(unitType = unitType,
                     distanceAmount = distanceAmount,
                     message = runMessage),
-                runs = runs,
+//                runs = runs,
                 onTotalDistanceChange = { totalDistance = it }
             )
         }
@@ -85,7 +90,58 @@ fun ScreenRun(modifier: Modifier = Modifier,
 @Composable
 fun RunScreenPreview() {
     RunHunTheme {
-        ScreenRun( modifier = Modifier,
+        PreviewRunScreen( modifier = Modifier,
             runs = fakeRuns.toMutableStateList())
+    }
+}
+
+@Composable
+fun PreviewRunScreen(modifier: Modifier = Modifier,
+                        runs: SnapshotStateList<RunModel>
+) {
+    var unitType by remember { mutableStateOf("kilometres") }
+    var distanceAmount by remember { mutableIntStateOf(10) }
+    var runMessage by remember { mutableStateOf("Go Hun!") }
+    var totalDistance by remember { mutableIntStateOf(0) }
+
+    totalDistance = runs.sumOf { it.distanceAmount }
+
+    Column {
+        Column(
+            modifier = modifier.padding(
+                start = 24.dp,
+                end = 24.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(30.dp),
+        ) {
+            WelcomeText()
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            )
+            {
+                RadioButtonGroup(
+                    modifier = modifier,
+                    onPaymentTypeChange = { unitType = it }
+                )
+                Spacer(modifier.weight(1f))
+                AmountPicker(
+                    onPaymentAmountChange = { distanceAmount = it }
+                )
+            }
+            ProgressBar(
+                modifier = modifier,
+                totalDistance = totalDistance)
+            MessageInput(
+                modifier = modifier,
+                onMessageChange = { runMessage = it }
+            )
+            RunButton (
+                modifier = modifier,
+                run = RunModel(unitType = unitType,
+                    distanceAmount = distanceAmount,
+                    message = runMessage),
+                onTotalDistanceChange = { totalDistance = it }
+            )
+        }
     }
 }
