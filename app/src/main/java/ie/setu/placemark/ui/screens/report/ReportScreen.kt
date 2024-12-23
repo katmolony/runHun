@@ -21,6 +21,9 @@ import ie.setu.placemark.R
 import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.data.fakeRuns
 import ie.setu.placemark.ui.components.general.Centre
+import ie.setu.placemark.ui.components.general.ShowError
+import ie.setu.placemark.ui.components.general.ShowLoader
+import ie.setu.placemark.ui.components.general.ShowRefreshList
 import ie.setu.placemark.ui.components.report.RunCardList
 import ie.setu.placemark.ui.components.report.ReportText
 import ie.setu.placemark.ui.theme.RunHunTheme
@@ -32,6 +35,10 @@ fun ReportScreen(modifier: Modifier = Modifier,
 
     val runs = reportViewModel.uiRuns.collectAsState().value
 
+    val isError = reportViewModel.isErr.value
+    val isLoading = reportViewModel.isLoading.value
+    val error = reportViewModel.error.value
+
     Column {
         Column(
             modifier = modifier.padding(
@@ -39,9 +46,13 @@ fun ReportScreen(modifier: Modifier = Modifier,
                 end = 24.dp
             ),
         ) {
+            if(isLoading) ShowLoader("Loading Runs...")
             ReportText()
-            if(runs.isEmpty())
-                Centre(androidx.compose.ui.Modifier.fillMaxSize()) {
+            if(!isError)
+                ShowRefreshList(onClick = { reportViewModel.getRuns() })
+
+            if (runs.isEmpty() && !isError)
+            Centre(androidx.compose.ui.Modifier.fillMaxSize()) {
                     androidx.compose.material3.Text(
                         color = androidx.compose.material3.MaterialTheme.colorScheme.secondary,
                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
@@ -51,15 +62,22 @@ fun ReportScreen(modifier: Modifier = Modifier,
                         text = androidx.compose.ui.res.stringResource(R.string.empty_list)
                     )
                 }
-            else
+            if (!isError) {
                 RunCardList(
                     runs = runs,
                     onClickRunDetails = onClickRunDetails,
-                    onDeleteRun = {
-                            run: RunModel
-                            -> reportViewModel.deleteRun(run)
+                    onDeleteRun = { run: RunModel
+                        ->
+                        reportViewModel.deleteRun(run)
                     }
                 )
+            }
+            if (isError) {
+                ShowError(headline = error.message!! + " error...",
+                    subtitle = error.toString(),
+                    onClick = { reportViewModel.getRuns() })
+            }
+
         }
     }
 }

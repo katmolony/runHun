@@ -22,7 +22,7 @@ internal fun RunCardList(
     LazyColumn {
         items(
             items = runs,
-            key = { run -> run.id }
+            key = { run -> run._id }
         ) { run ->
             RunCard(
                 unitType = run.unitType,
