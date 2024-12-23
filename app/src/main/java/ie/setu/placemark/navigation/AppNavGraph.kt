@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ie.setu.placemark.data.RunModel
+import ie.setu.placemark.ui.screens.details.DetailsScreen
 import ie.setu.placemark.ui.screens.options.OptionsScreen
 import ie.setu.placemark.ui.screens.report.ReportScreen
 import ie.setu.placemark.ui.screens.run.RunScreen
@@ -31,7 +32,12 @@ fun NavHostProvider(
         }
         composable(route = Report.route) {
             //call our 'Report' Screen Here
-            ReportScreen(modifier = modifier)
+            ReportScreen(modifier = modifier,
+                    onClickRunDetails = {
+                        runId : Int ->
+                        navController.navigateToRunDetails(runId)
+                    },
+                )
         }
         // Add option later: 9a lab 10 a
         //ui screenn for options
@@ -39,5 +45,18 @@ fun NavHostProvider(
             //call our 'Option' Screen Here
             OptionsScreen(modifier = modifier)
         }
+        composable(
+            route = Details.route,
+            arguments = Details.arguments
+        )
+        { navBackStackEntry ->
+            val id = navBackStackEntry.arguments?.getInt(Details.idArg)
+            if (id != null) {
+                DetailsScreen()
+            }
+        }
     }
+}
+private fun NavHostController.navigateToRunDetails(runId: Int) {
+    this.navigate("details/$runId")
 }

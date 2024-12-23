@@ -13,8 +13,11 @@ constructor(private val runDAO: RunDAO) {
     { runDAO.insert(run) }
 
     suspend fun update(run: RunModel)
-    { runDAO.update(run) }
+    { runDAO.update(run.id,run.message) }
 
     suspend fun delete(run: RunModel)
     { runDAO.delete(run) }
+
+    fun get(id: Int) = runDAO.get(id)
+
 }

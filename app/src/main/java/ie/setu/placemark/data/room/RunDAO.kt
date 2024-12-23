@@ -16,9 +16,13 @@ interface RunDAO {
     @Insert
     suspend fun insert(run: RunModel)
 
-    @Update
-    suspend fun update(run: RunModel)
+    @Query("UPDATE runmodel SET message=:message WHERE id = :id")
+    suspend fun update(id: Int, message:String)
 
     @Delete
     suspend fun delete(run: RunModel)
+
+    @Query("SELECT * FROM runmodel WHERE id=:id")
+    fun get(id: Int): Flow<RunModel>
+
 }

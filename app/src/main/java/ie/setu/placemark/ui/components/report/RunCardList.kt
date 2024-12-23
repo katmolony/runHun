@@ -16,7 +16,8 @@ import java.text.DateFormat
 internal fun RunCardList(
     runs: List<RunModel>,
     modifier: Modifier = Modifier,
-    onDeleteRun: (RunModel) -> Unit
+    onDeleteRun: (RunModel) -> Unit,
+    onClickRunDetails: (Int) -> Unit
 ) {
     LazyColumn {
         items(
@@ -28,7 +29,8 @@ internal fun RunCardList(
                 distanceAmount = run.distanceAmount,
                 message = run.message,
                 dateRan = DateFormat.getDateTimeInstance().format(run.dateRan),
-                onClickDelete = { onDeleteRun(run) }
+                onClickDelete = { onDeleteRun(run) },
+                onClickRunDetails = { onClickRunDetails(run.id) }
             )
         }
     }
@@ -43,6 +45,7 @@ fun DonationCardListPreview() {
         RunCardList(
             fakeRuns.toMutableStateList(),
             onDeleteRun = {},
+            onClickRunDetails = { },
         )
     }
 }

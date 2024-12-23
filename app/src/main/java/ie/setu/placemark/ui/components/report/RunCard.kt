@@ -46,7 +46,8 @@ fun RunCard(
     distanceAmount: Int,
     message: String,
     dateRan: String,
-    onClickDelete: () -> Unit
+    onClickDelete: () -> Unit,
+    onClickRunDetails: () -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -58,7 +59,8 @@ fun RunCard(
             distanceAmount,
             message,
             dateRan,
-            onClickDelete)
+            onClickDelete,
+            onClickRunDetails)
     }
 }
 
@@ -68,7 +70,8 @@ private fun RunCardContent(
     distanceAmount: Int,
     message: String,
     dateRan: String,
-    onClickDelete:  () -> Unit,
+    onClickDelete: () -> Unit,
+    onClickRunDetails: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
@@ -115,8 +118,8 @@ private fun RunCardContent(
                 Text(modifier = Modifier.padding(vertical = 16.dp), text = message)
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    FilledTonalButton(onClick = {}) {
-                        Text(text = "Show More...")
+                    FilledTonalButton(onClick = onClickRunDetails) {
+                        Text(text = "Show More")
                     }
 
                     FilledTonalIconButton(onClick = {
@@ -156,7 +159,8 @@ fun RunCardPreview() {
             distanceAmount = 100,
             message = "A description of my issue...",
             dateRan = DateFormat.getDateTimeInstance().format(Date()),
-            onClickDelete = {}
+            onClickDelete = {},
+            onClickRunDetails = {}
         )
     }
 }
