@@ -20,9 +20,9 @@ data class RunModel(
     val dateRan: Date = Date()
 )
 
-val fakeRuns = List(30) { i ->
+val fakeRuns = List(5) { i ->
     RunModel(id = 12345 + i,
-        _id = "12345" + i,
+        _id = "65629$i",
         "metre $i",
         i.toInt(),
         "Message $i",

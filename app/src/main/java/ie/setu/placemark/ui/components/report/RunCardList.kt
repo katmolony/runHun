@@ -17,7 +17,8 @@ internal fun RunCardList(
     runs: List<RunModel>,
     modifier: Modifier = Modifier,
     onDeleteRun: (RunModel) -> Unit,
-    onClickRunDetails: (Int) -> Unit
+    onClickRunDetails: (Int) -> Unit,
+    onRefreshList: () -> Unit
 ) {
     LazyColumn {
         items(
@@ -30,7 +31,8 @@ internal fun RunCardList(
                 message = run.message,
                 dateRan = DateFormat.getDateTimeInstance().format(run.dateRan),
                 onClickDelete = { onDeleteRun(run) },
-                onClickRunDetails = { onClickRunDetails(run.id) }
+                onClickRunDetails = { onClickRunDetails(run.id) },
+                onRefreshList = onRefreshList
             )
         }
     }
@@ -40,12 +42,13 @@ internal fun RunCardList(
     wallpaper = Wallpapers.BLUE_DOMINATED_EXAMPLE
 )
 @Composable
-fun DonationCardListPreview() {
+fun RunCardListPreview() {
     RunHunTheme {
         RunCardList(
             fakeRuns.toMutableStateList(),
             onDeleteRun = {},
             onClickRunDetails = { },
+            onRefreshList = { },
         )
     }
 }

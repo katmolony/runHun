@@ -54,7 +54,7 @@ constructor(private val repository: RetrofitRepository) : ViewModel() {
 
     fun deleteRun(run: RunModel) {
         viewModelScope.launch {
-            //   repository.delete(run)
+               repository.delete(run)
         }
     }
 }

@@ -70,10 +70,10 @@ fun ReportScreen(modifier: Modifier = Modifier,
                 RunCardList(
                     runs = runs,
                     onClickRunDetails = onClickRunDetails,
-                    onDeleteRun = { run: RunModel
-                        ->
+                    onDeleteRun = { run: RunModel ->
                         reportViewModel.deleteRun(run)
-                    }
+                    },
+                    onRefreshList = { reportViewModel.getRuns() }
                 )
             }
             if (isError) {
@@ -123,7 +123,8 @@ fun PreviewReportScreen(modifier: Modifier = Modifier,
                 RunCardList(
                     runs = runs,
                     onDeleteRun = {},
-                    onClickRunDetails = { }
+                    onClickRunDetails = { },
+                    onRefreshList = { }
                 )
         }
     }

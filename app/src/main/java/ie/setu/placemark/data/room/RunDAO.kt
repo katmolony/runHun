@@ -3,6 +3,7 @@ package ie.setu.placemark.data.room
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import ie.setu.placemark.data.RunModel
@@ -13,7 +14,7 @@ interface RunDAO {
     @Query("SELECT * FROM runmodel")
     fun getAll(): Flow<List<RunModel>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(run: RunModel)
 
     @Query("UPDATE runmodel SET message=:message WHERE id = :id")

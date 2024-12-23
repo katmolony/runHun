@@ -48,6 +48,7 @@ fun RunCard(
     dateRan: String,
     onClickDelete: () -> Unit,
     onClickRunDetails: () -> Unit,
+    onRefreshList: () -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -60,7 +61,8 @@ fun RunCard(
             message,
             dateRan,
             onClickDelete,
-            onClickRunDetails)
+            onClickRunDetails,
+            onRefreshList)
     }
 }
 
@@ -71,7 +73,8 @@ private fun RunCardContent(
     message: String,
     dateRan: String,
     onClickDelete: () -> Unit,
-    onClickRunDetails: () -> Unit
+    onClickRunDetails: () -> Unit,
+    onRefreshList: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
@@ -130,7 +133,8 @@ private fun RunCardContent(
                     if (showDeleteConfirmDialog) {
                         showDeleteAlert(
                             onDismiss = { showDeleteConfirmDialog = false },
-                            onDelete = onClickDelete
+                            onDelete = onClickDelete,
+                            onRefresh = onRefreshList
                         )
                     }
 
@@ -155,12 +159,13 @@ private fun RunCardContent(
 fun RunCardPreview() {
     RunHunTheme {
         RunCard(
-            unitType = "Direct",
+            unitType = "metre",
             distanceAmount = 100,
             message = "A description of my issue...",
             dateRan = DateFormat.getDateTimeInstance().format(Date()),
             onClickDelete = {},
-            onClickRunDetails = {}
+            onClickRunDetails = {},
+            onRefreshList = {}
         )
     }
 }
@@ -168,14 +173,19 @@ fun RunCardPreview() {
 @Composable
 fun showDeleteAlert(
     onDismiss: () -> Unit,
-    onDelete: () -> Unit) {
+    onDelete: () -> Unit,
+    onRefresh: () -> Unit
+) {
     AlertDialog(
         onDismissRequest = onDismiss ,
         title = { Text(stringResource(id = R.string.confirm_delete)) },
         text = { Text(stringResource(id = R.string.confirm_delete_message)) },
         confirmButton = {
             Button(
-                onClick = { onDelete() }
+                onClick = {
+                    onDelete()
+                    onRefresh()
+                }
             ) { Text("Yes") }
         },
         dismissButton = {
