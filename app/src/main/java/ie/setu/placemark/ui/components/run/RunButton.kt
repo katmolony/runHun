@@ -38,6 +38,7 @@ import ie.setu.placemark.ui.theme.RunHunTheme
 import timber.log.Timber
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import ie.setu.placemark.ui.components.general.ShowLoader
 import ie.setu.placemark.ui.screens.report.ReportViewModel
 import ie.setu.placemark.ui.screens.run.RunViewModel
 
@@ -55,6 +56,13 @@ fun RunButton(
     val message = stringResource(R.string.limitExceeded,run.distanceAmount)
 
     val runs = reportViewModel.uiRuns.collectAsState().value
+
+    val isError = runViewModel.isErr.value
+    val error = runViewModel.error.value
+    val isLoading = runViewModel.isLoading.value
+
+    if(isLoading) ShowLoader("Trying to Add a Run...")
+
 
     Row {
         Button(
@@ -107,11 +115,18 @@ fun RunButton(
                 }
             })
     }
+    //Required to refresh our 'totalRan'
+    if(isError)
+        Toast.makeText(context,"Unable to add Run at this Time...",
+            Toast.LENGTH_SHORT).show()
+    else
+        reportViewModel.getRuns()
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DonateButtonPreview() {
+fun RunButtonPreview() {
     RunHunTheme {
         PreviewRunButton(
             Modifier,
@@ -149,7 +164,7 @@ fun PreviewRunButton(
             },
             elevation = ButtonDefaults.buttonElevation(20.dp)
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Donate")
+            Icon(Icons.Default.Add, contentDescription = "Add Run")
             Spacer(modifier.width(width = 4.dp))
             Text(
                 text = stringResource(R.string.runButton),

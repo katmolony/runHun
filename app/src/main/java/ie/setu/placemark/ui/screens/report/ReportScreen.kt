@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
@@ -39,6 +40,10 @@ fun ReportScreen(modifier: Modifier = Modifier,
     val isLoading = reportViewModel.isLoading.value
     val error = reportViewModel.error.value
 
+    LaunchedEffect(Unit) {
+        reportViewModel.getRuns()
+    }
+
     Column {
         Column(
             modifier = modifier.padding(
@@ -50,16 +55,15 @@ fun ReportScreen(modifier: Modifier = Modifier,
             ReportText()
             if(!isError)
                 ShowRefreshList(onClick = { reportViewModel.getRuns() })
-
             if (runs.isEmpty() && !isError)
-            Centre(androidx.compose.ui.Modifier.fillMaxSize()) {
-                    androidx.compose.material3.Text(
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.secondary,
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+            Centre(Modifier.fillMaxSize()) {
+                    Text(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 30.sp,
                         lineHeight = 34.sp,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        text = androidx.compose.ui.res.stringResource(R.string.empty_list)
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.empty_list)
                     )
                 }
             if (!isError) {
