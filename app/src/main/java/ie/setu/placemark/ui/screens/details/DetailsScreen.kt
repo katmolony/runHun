@@ -44,6 +44,19 @@ fun DetailsScreen(
     detailViewModel: DetailsViewModel = hiltViewModel()
 ) {
     var run = detailViewModel.run.value
+    val errorEmptyMessage = "Message Cannot be Empty..."
+    val errorShortMessage = "Message must be at least 2 characters"
+    var text by rememberSaveable { mutableStateOf("") }
+    var onMessageChanged by rememberSaveable { mutableStateOf(false) }
+    var isEmptyError by rememberSaveable { mutableStateOf(false) }
+    var isShortError by rememberSaveable { mutableStateOf(false) }
+
+    fun validate(text: String) {
+        isEmptyError = text.isEmpty()
+        isShortError = text.length < 2
+        onMessageChanged = !(isEmptyError || isShortError)
+    }
+
 
     Column(modifier = modifier.padding(
         start = 24.dp,
@@ -71,11 +84,58 @@ fun DetailsScreen(
                 label = "Date Donated")
             //Message Field
 
+            text = run.message
+            OutlinedTextField(modifier = Modifier.fillMaxWidth(),
+                value = text,
+                onValueChange = {
+                    text = it
+                    validate(text)
+                    run.message = text
+                },
+                maxLines = 2,
+                label = { Text(text = "Message") },
+                isError = isEmptyError || isShortError,
+                supportingText = {
+                    if (isEmptyError) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = errorEmptyMessage,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                    else
+                        if (isShortError) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = errorShortMessage,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                },
+                trailingIcon = {
+                    if (isEmptyError || isShortError)
+                        Icon(Icons.Filled.Warning,"error", tint = MaterialTheme.colorScheme.error)
+                    else
+                        Icon(
+                            Icons.Default.Edit, contentDescription = "add/edit",
+                            tint = Color.Black
+                        )
+                },
+                keyboardActions = KeyboardActions { validate(text) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
+                )
+            )
+
             //End of Message Field
             Spacer(modifier.height(height = 48.dp))
             Button(
-                onClick = {},
+                onClick = {
+                    detailViewModel.updateRun(run)
+                    onMessageChanged = false
+                },
                 elevation = ButtonDefaults.buttonElevation(20.dp),
+                enabled = onMessageChanged
             ){
                 Icon(Icons.Default.Save, contentDescription = "Save")
                 Spacer(modifier.width(width = 8.dp))

@@ -11,7 +11,7 @@ data class RunModel(
     val id: Int = 0,
     val unitType: String = "N/A",
     val distanceAmount: Int = 0,
-    val message: String = "Go Hun!",
+    var message: String = "Go Hun!",
     val dateRan: Date = Date()
 )
 
