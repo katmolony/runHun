@@ -35,6 +35,8 @@ import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 
@@ -69,6 +71,7 @@ private fun RunCardContent(
     onClickDelete:  () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var showDeleteConfirmDialog by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -116,9 +119,18 @@ private fun RunCardContent(
                         Text(text = "Show More...")
                     }
 
-                    FilledTonalIconButton(onClick = onClickDelete) {
-                        Icon(Icons.Filled.Delete, "Delete Donation")
+                    FilledTonalIconButton(onClick = {
+                        showDeleteConfirmDialog = true
+                    }) {
+                        Icon(Icons.Filled.Delete, "Delete Run")
                     }
+                    if (showDeleteConfirmDialog) {
+                        showDeleteAlert(
+                            onDismiss = { showDeleteConfirmDialog = false },
+                            onDelete = onClickDelete
+                        )
+                    }
+
                 }
             }
         }
@@ -147,4 +159,23 @@ fun RunCardPreview() {
             onClickDelete = {}
         )
     }
+}
+
+@Composable
+fun showDeleteAlert(
+    onDismiss: () -> Unit,
+    onDelete: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss ,
+        title = { Text(stringResource(id = R.string.confirm_delete)) },
+        text = { Text(stringResource(id = R.string.confirm_delete_message)) },
+        confirmButton = {
+            Button(
+                onClick = { onDelete() }
+            ) { Text("Yes") }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) { Text("No") }
+        }
+    )
 }

@@ -21,7 +21,8 @@
     <string name="show_more">Show More</string>
     <string name="empty_list">No Run Yet - Go out for one!</string>
     <string name="options_message">Welcome hun :)\n\nTime for a run</string>
-
+    <string name="confirm_delete">Confirm Delete?</string>
+    <string name="confirm_delete_message">Are you sure you want to delete this donation?</string>
 
 </resources>
 
