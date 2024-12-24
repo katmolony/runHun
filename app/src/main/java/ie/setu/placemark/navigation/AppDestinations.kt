@@ -39,7 +39,7 @@ object Details : AppDestination {
     const val idArg = "id"
     override val route = "details/{$idArg}"
     val arguments = listOf(
-        navArgument(idArg) { type = NavType.IntType }
+        navArgument(idArg) {type = NavType.StringType }
     )
 }
 

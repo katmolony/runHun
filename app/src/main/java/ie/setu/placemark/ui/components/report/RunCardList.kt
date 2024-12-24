@@ -17,7 +17,7 @@ internal fun RunCardList(
     runs: List<RunModel>,
     modifier: Modifier = Modifier,
     onDeleteRun: (RunModel) -> Unit,
-    onClickRunDetails: (Int) -> Unit,
+    onClickRunDetails: (String) -> Unit,
     onRefreshList: () -> Unit
 ) {
     LazyColumn {
@@ -31,7 +31,7 @@ internal fun RunCardList(
                 message = run.message,
                 dateRan = DateFormat.getDateTimeInstance().format(run.dateRan),
                 onClickDelete = { onDeleteRun(run) },
-                onClickRunDetails = { onClickRunDetails(run.id) },
+                onClickRunDetails = { onClickRunDetails(run._id) },
                 onRefreshList = onRefreshList
             )
         }

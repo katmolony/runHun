@@ -32,9 +32,10 @@ fun NavHostProvider(
         }
         composable(route = Report.route) {
             //call our 'Report' Screen Here
-            ReportScreen(modifier = modifier,
+            ReportScreen(
+                modifier = modifier,
                     onClickRunDetails = {
-                        runId : Int ->
+                        runId : String ->
                         navController.navigateToRunDetails(runId)
                     },
                 )
@@ -50,13 +51,13 @@ fun NavHostProvider(
             arguments = Details.arguments
         )
         { navBackStackEntry ->
-            val id = navBackStackEntry.arguments?.getInt(Details.idArg)
+            val id = navBackStackEntry.arguments?.getString(Details.idArg)
             if (id != null) {
                 DetailsScreen()
             }
         }
     }
 }
-private fun NavHostController.navigateToRunDetails(runId: Int) {
+private fun NavHostController.navigateToRunDetails(runId: String) {
     this.navigate("details/$runId")
 }

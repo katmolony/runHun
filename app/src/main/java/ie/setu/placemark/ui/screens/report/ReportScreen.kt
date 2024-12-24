@@ -30,9 +30,10 @@ import ie.setu.placemark.ui.components.report.ReportText
 import ie.setu.placemark.ui.theme.RunHunTheme
 
 @Composable
-fun ReportScreen(modifier: Modifier = Modifier,
-                 onClickRunDetails: (Int) -> Unit,
-                 reportViewModel: ReportViewModel = hiltViewModel()) {
+fun ReportScreen(
+    modifier: Modifier = Modifier,
+    onClickRunDetails: (String) -> Unit,
+    reportViewModel: ReportViewModel = hiltViewModel()) {
 
     val runs = reportViewModel.uiRuns.collectAsState().value
 

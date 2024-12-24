@@ -1,6 +1,7 @@
 package ie.setu.placemark.ui.screens.details
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ie.setu.placemark.ui.components.details.ReadOnlyTextField
 import ie.setu.placemark.ui.components.details.DetailsScreenText
+import ie.setu.placemark.ui.components.general.ShowLoader
+import androidx.compose.ui.platform.LocalContext
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -51,12 +54,23 @@ fun DetailsScreen(
     var isEmptyError by rememberSaveable { mutableStateOf(false) }
     var isShortError by rememberSaveable { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val isError = detailViewModel.isErr.value
+    val error = detailViewModel.error.value
+    val isLoading = detailViewModel.isLoading.value
+
+    if(isLoading) ShowLoader("Retrieving Run Details...")
+
     fun validate(text: String) {
         isEmptyError = text.isEmpty()
         isShortError = text.length < 2
         onMessageChanged = !(isEmptyError || isShortError)
     }
 
+    if(isError)
+        Toast.makeText(context,"Unable to fetch Details at this Time...",
+            Toast.LENGTH_SHORT).show()
+    if(!isError && !isLoading)
 
     Column(modifier = modifier.padding(
         start = 24.dp,
@@ -73,15 +87,15 @@ fun DetailsScreen(
             ),
         )
         {
-            //Payment Type Field
+            //Unit Type Field
             ReadOnlyTextField(value = run.unitType,
-                label = "Payment Type")
-            //Payment Amount Field
+                label = "Unit Type")
+            // Distance Field
             ReadOnlyTextField(value = run.distanceAmount.toString(),
-                label = "Payment Amount")
-            //Date Donated Field
+                label = "Distance Amount")
+            //Date Field
             ReadOnlyTextField(value = run.dateRan.toString(),
-                label = "Date Donated")
+                label = "Date Ran")
             //Message Field
 
             text = run.message
