@@ -26,9 +26,7 @@ import androidx.compose.ui.unit.sp
 import ie.setu.placemark.ui.theme.RunHunTheme
 
 @Composable
-fun ShowError(headline: String,
-              subtitle: String,
-              onClick: ((Unit) -> Unit)) {
+fun ShowError(headline: String, subtitle: String, onClick: ((Unit) -> Unit)) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +56,7 @@ fun ShowError(headline: String,
         }
         Button(modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 16.dp)
             .align(Alignment.BottomCenter),
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.Black,
@@ -140,7 +138,7 @@ fun UtilsPreview() {
     RunHunTheme {
         ShowError(headline = "Main Error Message",
             subtitle = "more error information", onClick = {})
-        //   ShowLoader()
-        //   ShowRefreshList(onClick = {})
+        ShowLoader("Trying to Add a Run...")
+     //   ShowRefreshList(onClick = {})
     }
 }

@@ -8,6 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ie.setu.placemark.ui.screens.home.HomeScreen
+import ie.setu.placemark.ui.screens.login.LoginScreen
+import ie.setu.placemark.ui.screens.profile.ProfileScreen
+import ie.setu.placemark.ui.screens.register.RegisterScreen
 import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.ui.screens.details.DetailsScreen
 import ie.setu.placemark.ui.screens.options.OptionsScreen
@@ -18,8 +22,9 @@ import ie.setu.placemark.ui.screens.run.RunScreen
 fun NavHostProvider(
     modifier: Modifier,
     navController: NavHostController,
+    startDestination: AppDestination,
     paddingValues: PaddingValues,
-    runs: SnapshotStateList<RunModel>
+//    runs: SnapshotStateList<RunModel>
 ) {
     NavHost(
         navController = navController,
@@ -30,6 +35,12 @@ fun NavHostProvider(
             //call our 'Run' Screen Here
             RunScreen(modifier = modifier)
         }
+
+        composable(route = Home.route) {
+            //call our 'Home' Screen Here
+            HomeScreen(modifier = modifier)
+        }
+
         composable(route = Report.route) {
             //call our 'Report' Screen Here
             ReportScreen(
@@ -40,12 +51,29 @@ fun NavHostProvider(
                     },
                 )
         }
-        // Add option later: 9a lab 10 a
+
         //ui screenn for options
         composable(route = Options.route) {
             //call our 'Option' Screen Here
             OptionsScreen(modifier = modifier)
         }
+
+        composable(route = Login.route) {
+            //call our 'Login' Screen Here
+            LoginScreen(
+                navController = navController,
+                onLogin = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = Register.route) {
+            //call our 'Register' Screen Here
+            RegisterScreen(
+                navController = navController,
+                onRegister = { navController.popBackStack() }
+            )
+        }
+
         composable(
             route = Details.route,
             arguments = Details.arguments
@@ -55,6 +83,17 @@ fun NavHostProvider(
             if (id != null) {
                 DetailsScreen()
             }
+        }
+
+        composable(route = Profile.route) {
+            ProfileScreen(
+                onSignOut = {
+                    navController.popBackStack()
+                    navController.navigate(Login.route) {
+                        popUpTo(Home.route) { inclusive = true }
+                    }
+                },
+            )
         }
     }
 }

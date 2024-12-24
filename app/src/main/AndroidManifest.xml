@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name="ie.setu.placemark.main.RunHunMainApp"
+        android:name="ie.setu.placemark.RunHunMainApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -17,7 +17,7 @@
         android:theme="@style/Theme.RunHun"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".RunHunMainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.RunHun">

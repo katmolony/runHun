@@ -23,7 +23,6 @@ import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.ui.theme.RunHunTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import ie.setu.placemark.R
@@ -34,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.toMutableStateList
 import ie.setu.placemark.data.fakeRuns
-import ie.setu.placemark.ui.theme.RunHunTheme
 import timber.log.Timber
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel

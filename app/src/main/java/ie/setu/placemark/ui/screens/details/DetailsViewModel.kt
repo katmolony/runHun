@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
-import ie.setu.placemark.data.room.RoomRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject

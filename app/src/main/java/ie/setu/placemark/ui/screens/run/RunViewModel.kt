@@ -8,7 +8,6 @@ import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
 import javax.inject.Inject
 import kotlinx.coroutines.launch
-import ie.setu.placemark.data.room.RoomRepository
 
 @HiltViewModel
 class RunViewModel @Inject
