@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "471566779669",
+    "project_id": "runhun-c18e5",
+    "storage_bucket": "runhun-c18e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471566779669:android:9f2f800ce330f75666951c",
+        "android_client_info": {
+          "package_name": "ie.setu.placemark"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTHRh2PhdVqaO12efD-bA8_LmuSXiKUqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.android.ksp)
+    alias(libs.plugins.google.gms.google.services)
 }
 android {
     namespace = "ie.setu.placemark"
@@ -66,6 +67,7 @@ dependencies {
     implementation(libs.androidx.benchmark.macro)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -92,4 +94,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
+
+    //Google Services
+    implementation(libs.play.services.auth)
+
+    //Firebase
+    implementation(libs.firebase.auth.ktx)
 }
