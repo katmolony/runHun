@@ -3,7 +3,6 @@ package ie.setu.placemark.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,7 +11,6 @@ import ie.setu.placemark.ui.screens.home.HomeScreen
 import ie.setu.placemark.ui.screens.login.LoginScreen
 import ie.setu.placemark.ui.screens.profile.ProfileScreen
 import ie.setu.placemark.ui.screens.register.RegisterScreen
-import ie.setu.placemark.data.RunModel
 import ie.setu.placemark.ui.screens.details.DetailsScreen
 import ie.setu.placemark.ui.screens.options.OptionsScreen
 import ie.setu.placemark.ui.screens.report.ReportScreen
@@ -28,7 +26,7 @@ fun NavHostProvider(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Report.route,
+        startDestination = startDestination.route,
         modifier = Modifier.padding(paddingValues = paddingValues)) {
 
         composable(route = Run.route) {

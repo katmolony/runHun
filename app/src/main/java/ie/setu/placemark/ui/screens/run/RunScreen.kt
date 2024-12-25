@@ -10,8 +10,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ie.setu.placemark.data.RunModel
-import ie.setu.placemark.data.fakeRuns
+import ie.setu.placemark.data.model.RunModel
+import ie.setu.placemark.data.model.fakeRuns
 import ie.setu.placemark.ui.components.run.AmountPicker
 import ie.setu.placemark.ui.components.run.MessageInput
 import ie.setu.placemark.ui.components.run.ProgressBar

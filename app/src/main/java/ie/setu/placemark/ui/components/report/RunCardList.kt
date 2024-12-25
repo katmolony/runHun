@@ -7,8 +7,8 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
-import ie.setu.placemark.data.RunModel
-import ie.setu.placemark.data.fakeRuns
+import ie.setu.placemark.data.model.RunModel
+import ie.setu.placemark.data.model.fakeRuns
 import ie.setu.placemark.ui.theme.RunHunTheme
 import java.text.DateFormat
 

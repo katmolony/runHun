@@ -1,6 +1,6 @@
 package ie.setu.placemark.data.api
 
-import ie.setu.placemark.data.RunModel
+import ie.setu.placemark.data.model.RunModel
 
 class RunWrapper {
     var message: String? = null

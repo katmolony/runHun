@@ -1,4 +1,4 @@
-package ie.setu.placemark.data
+package ie.setu.placemark.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

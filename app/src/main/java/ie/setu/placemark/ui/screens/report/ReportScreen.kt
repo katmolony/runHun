@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ie.setu.placemark.R
-import ie.setu.placemark.data.RunModel
-import ie.setu.placemark.data.fakeRuns
+import ie.setu.placemark.data.model.RunModel
+import ie.setu.placemark.data.model.fakeRuns
 import ie.setu.placemark.ui.components.general.Centre
 import ie.setu.placemark.ui.components.general.ShowError
 import ie.setu.placemark.ui.components.general.ShowLoader

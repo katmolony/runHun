@@ -1,6 +1,6 @@
 package ie.setu.placemark.data.room
 
-import ie.setu.placemark.data.RunModel
+import ie.setu.placemark.data.model.RunModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 

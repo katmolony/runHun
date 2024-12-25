@@ -3,7 +3,7 @@ package ie.setu.placemark.data.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ie.setu.placemark.data.RunModel
+import ie.setu.placemark.data.model.RunModel
 
 @Database(entities = [RunModel::class], version = 1)
 @TypeConverters(Converters::class)

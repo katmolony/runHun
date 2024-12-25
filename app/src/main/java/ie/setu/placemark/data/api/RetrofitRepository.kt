@@ -1,6 +1,6 @@
 package ie.setu.placemark.data.api
 
-import ie.setu.placemark.data.RunModel
+import ie.setu.placemark.data.model.RunModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

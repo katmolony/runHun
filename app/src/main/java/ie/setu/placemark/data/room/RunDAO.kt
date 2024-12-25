@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ie.setu.placemark.data.RunModel
+import ie.setu.placemark.data.model.RunModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
