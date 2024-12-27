@@ -11,6 +11,8 @@ import ie.setu.placemark.ui.components.general.HeadingLogoComponent
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Composable
 fun BasicContent(
