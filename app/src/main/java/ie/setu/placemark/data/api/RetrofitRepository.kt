@@ -11,6 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import javax.inject.Inject
+import ie.setu.placemark.data.model.UserProfileModel
 
 class RetrofitRepository @Inject
 constructor(private val serviceApi: RunService)  {
@@ -60,6 +61,33 @@ constructor(private val serviceApi: RunService)  {
         return withContext(Dispatchers.IO) {
             val runs = serviceApi.getAllRuns()
             runs.body() ?: emptyList()
+        }
+    }
+
+    suspend fun getUserProfile(email: String): UserProfileModel? {
+        return withContext(Dispatchers.IO) {
+            val response = serviceApi.getUserProfile(email)
+            response.body()
+        }
+    }
+
+    suspend fun createUserProfile(userProfile: UserProfileModel): UserProfileModel? {
+        return withContext(Dispatchers.IO) {
+            val response = serviceApi.createUserProfile(userProfile)
+            response.body()
+        }
+    }
+
+    suspend fun updateUserProfile(email: String, userProfile: UserProfileModel): UserProfileModel? {
+        return withContext(Dispatchers.IO) {
+            val response = serviceApi.updateUserProfile(email, userProfile)
+            response.body()
+        }
+    }
+
+    suspend fun deleteUserProfile(email: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            serviceApi.deleteUserProfile(email).isSuccessful
         }
     }
 }

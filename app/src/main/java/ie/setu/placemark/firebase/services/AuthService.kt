@@ -1,6 +1,7 @@
 package ie.setu.placemark.firebase.services
 
 import com.google.firebase.auth.FirebaseUser
+import ie.setu.placemark.data.model.UserProfileModel
 import ie.setu.placemark.firebase.auth.Response
 
 typealias FirebaseSignInResponse = Response<FirebaseUser>
@@ -17,6 +18,8 @@ interface AuthService {
                 : FirebaseSignInResponse
     suspend fun signOut()
 
+    // Define the method without the 'abstract' keyword
+    suspend fun createUserProfile(userProfile: UserProfileModel): Response<FirebaseUser>
 }
 
 

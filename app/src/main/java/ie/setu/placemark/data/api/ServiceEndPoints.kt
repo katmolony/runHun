@@ -4,5 +4,6 @@ class ServiceEndPoints {
     companion object {
         const val BASE_URL= "https://runhunx-server.onrender.com/"
         const val RUNS_ENDPOINT = "runs"
+        const val USERS_ENDPOINT = "users"
     }
 }

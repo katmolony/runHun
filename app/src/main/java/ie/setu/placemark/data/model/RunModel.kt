@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 import java.util.UUID
 
-
 @Entity
 data class RunModel(
     @PrimaryKey(autoGenerate = true)

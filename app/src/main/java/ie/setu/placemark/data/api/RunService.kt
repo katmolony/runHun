@@ -8,6 +8,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import ie.setu.placemark.data.model.UserProfileModel
+import retrofit2.http.*
 
 interface RunService {
 
@@ -45,4 +47,26 @@ interface RunService {
     // New call to get all runs regardless of email
     @GET(ServiceEndPoints.RUNS_ENDPOINT)
     suspend fun getAllRuns(): Response<List<RunModel>>
+
+    // UserProfileModel API endpoints
+    @GET(ServiceEndPoints.USERS_ENDPOINT + "/{email}")
+    suspend fun getUserProfile(
+        @Path("email") email: String
+    ): Response<UserProfileModel>
+
+    @POST(ServiceEndPoints.USERS_ENDPOINT)
+    suspend fun createUserProfile(
+        @Body userProfile: UserProfileModel
+    ): Response<UserProfileModel>
+
+    @PUT(ServiceEndPoints.USERS_ENDPOINT + "/{email}")
+    suspend fun updateUserProfile(
+        @Path("email") email: String,
+        @Body userProfile: UserProfileModel
+    ): Response<UserProfileModel>
+
+    @DELETE(ServiceEndPoints.USERS_ENDPOINT + "/{email}")
+    suspend fun deleteUserProfile(
+        @Path("email") email: String
+    ): Response<Unit>
 }

@@ -36,15 +36,19 @@ fun HomeScreen(modifier: Modifier = Modifier,
 
     val currentUser = homeViewModel.currentUser
     val isActiveSession = homeViewModel.isAuthenticated()
+
     val userEmail = if (isActiveSession) currentUser?.email else ""
     val userName = if (isActiveSession) currentUser?.displayName else ""
 
-        val userDestinations = if (!isActiveSession)
+//     Use safe calls and fallback to empty string if no active session
+//    val userEmail = currentUser?.email ?: ""
+//    val userName = currentUser?.displayName ?: ""
+
+    val userDestinations = if (!isActiveSession)
                                     userSignedOutDestinations
                                 else bottomAppBarDestinations
 
       if (isActiveSession) startScreen = Report
-     // if (isActiveSession) startScreen = Options
 
     Scaffold(
         modifier = modifier,

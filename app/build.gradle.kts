@@ -100,4 +100,5 @@ dependencies {
 
     //Firebase
     implementation(libs.firebase.auth.ktx)
+
 }

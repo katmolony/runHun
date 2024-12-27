@@ -14,17 +14,18 @@ import javax.inject.Singleton
 object RoomModule {
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context):
-            AppDatabase =
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "run_database")
             .fallbackToDestructiveMigration()
             .build()
 
     @Provides
-    fun provideRunDAO(appDatabase: AppDatabase):
-            RunDAO = appDatabase.getRunDAO()
+    fun provideRunDAO(appDatabase: AppDatabase): RunDAO = appDatabase.getRunDAO()
 
     @Provides
-    fun provideRoomRepository(runDAO: RunDAO):
-            RoomRepository = RoomRepository(runDAO)
+    fun provideUserProfileDAO(appDatabase: AppDatabase): UserProfileDAO = appDatabase.getUserProfileDAO()
+
+    @Provides
+    fun provideRoomRepository(runDAO: RunDAO, userProfileDAO: UserProfileDAO): RoomRepository =
+        RoomRepository(runDAO, userProfileDAO)
 }
