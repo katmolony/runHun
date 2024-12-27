@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import ie.setu.placemark.navigation.About
 import ie.setu.placemark.navigation.Options
 import ie.setu.placemark.ui.theme.RunHunTheme
 @Composable
@@ -66,7 +67,7 @@ fun DropDownMenu(navController: NavController) {
                 onClick = {
                     selectedOptionText = "Info"
                     expanded = false
-                    navController.navigate(Options.route)
+                    navController.navigate(About.route)
                 },
             )
         }

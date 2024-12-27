@@ -6,12 +6,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
+import ie.setu.placemark.firebase.services.AuthService
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RunViewModel @Inject
-constructor(private val repository: RetrofitRepository)
+constructor(
+    private val repository: RetrofitRepository,
+    private val authService: AuthService
+)
     : ViewModel() {
     var isErr = mutableStateOf(false)
     var error = mutableStateOf(Exception())
@@ -26,7 +30,7 @@ constructor(private val repository: RetrofitRepository)
         viewModelScope.launch {
             try {
                 isLoading.value = true
-                repository.insert(run)
+                repository.insert(authService.email!!, run)
                 isErr.value = false
                 isLoading.value = false
             } catch (e: Exception) {

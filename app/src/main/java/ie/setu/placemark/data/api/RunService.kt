@@ -10,20 +10,39 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface RunService {
-    @GET(ServiceEndPoints.RUNS_ENDPOINT)
-    suspend fun getall(): Response<List<RunModel>>
 
-    @GET(ServiceEndPoints.RUNS_ENDPOINT + "/{id}")
-    suspend fun get(@Path("id") id: String): Response<List<RunModel>>
+    // Existing calls
+    @GET(ServiceEndPoints.RUNS_ENDPOINT + "/{email}")
+    suspend fun getall(
+        @Path("email") email: String
+    ): Response<List<RunModel>>
 
-    @DELETE(ServiceEndPoints.RUNS_ENDPOINT + "/{id}")
-    suspend fun delete(@Path("id") id: String): RunWrapper
+    @GET(ServiceEndPoints.RUNS_ENDPOINT + "/{email}/{id}")
+    suspend fun get(
+        @Path("email") email: String,
+        @Path("id") id: String
+    ): Response<List<RunModel>>
 
-    @POST(ServiceEndPoints.RUNS_ENDPOINT)
-    suspend fun post(@Body run: RunModel): RunWrapper
-
-    @PUT(ServiceEndPoints.RUNS_ENDPOINT + "/{id}")
-    suspend fun put(@Path("id") id: String,
-                    @Body run: RunModel
+    @DELETE(ServiceEndPoints.RUNS_ENDPOINT + "/{email}/{id}")
+    suspend fun delete(
+        @Path("email") email: String,
+        @Path("id") id: String
     ): RunWrapper
+
+    @POST(ServiceEndPoints.RUNS_ENDPOINT + "/{email}")
+    suspend fun post(
+        @Path("email") email: String,
+        @Body run: RunModel
+    ): RunWrapper
+
+    @PUT(ServiceEndPoints.RUNS_ENDPOINT + "/{email}/{id}")
+    suspend fun put(
+        @Path("email") email: String,
+        @Path("id") id: String,
+        @Body run: RunModel
+    ): RunWrapper
+
+    // New call to get all runs regardless of email
+    @GET(ServiceEndPoints.RUNS_ENDPOINT)
+    suspend fun getAllRuns(): Response<List<RunModel>>
 }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,6 +30,12 @@ object Run : AppDestination {
     override val icon = Icons.Filled.AddCircle
     override val label = "Run"
     override val route = "run"
+}
+
+object About : AppDestination {
+    override val icon = Icons.Filled.Info
+    override val label = "About"
+    override val route = "about"
 }
 
 object Options : AppDestination {
@@ -71,6 +78,27 @@ object Register : AppDestination {
     override val route = "Register"
 }
 
+object Achievements : AppDestination {
+    override val icon = Icons.Filled.Details
+    override val label = "Achievements"
+    const val idArg = "id"
+    override val route = "achievements/{$idArg}"
+    val arguments = listOf(
+        navArgument(idArg) {type = NavType.StringType }
+    )
+}
+
 val bottomAppBarDestinations = listOf(Run, Report, Options, Profile)
 val userSignedOutDestinations = listOf(Login, Register)
-val allDestinations = listOf(Report, Run, Options, Details, Home, Profile, Login, Register)
+val allDestinations = listOf(
+    Report,
+    Run,
+    Options,
+    Details,
+    Home,
+    Profile,
+    Login,
+    Register,
+    About,
+    Achievements
+)

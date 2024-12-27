@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
+import ie.setu.placemark.firebase.services.AuthService
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject
 constructor(private val repository: RetrofitRepository,
-            savedStateHandle: SavedStateHandle
+            savedStateHandle: SavedStateHandle,
+            private val authService: AuthService
 ) : ViewModel() {
 
     var run = mutableStateOf(RunModel())
@@ -23,13 +25,15 @@ constructor(private val repository: RetrofitRepository,
     var error = mutableStateOf(Exception())
     var isLoading = mutableStateOf(false)
 
+
+
     init {
         viewModelScope.launch {
             try {
                 isLoading.value = true
                 Timber.i("DetailsViewModel. Fetching run with id: $id") // Log the ID
-                run.value = repository.get(id)[0]
-                val fetchedRun = repository.get(id)
+                run.value = repository.get(authService.email!!,id)[0]
+                val fetchedRun = repository.get(authService.email!!,id)
                 Timber.i("DetailsViewModel. Run fetched: $fetchedRun") // Log the response
                 isErr.value = false
                 isLoading.value = false
@@ -46,7 +50,7 @@ constructor(private val repository: RetrofitRepository,
         viewModelScope.launch {
             try {
                 isLoading.value = true
-                repository.update(run)
+                repository.update(authService.email!!, run)
                 isErr.value = false
                 isLoading.value = false
             } catch (e: Exception) {

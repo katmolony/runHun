@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
+import ie.setu.placemark.firebase.services.AuthService
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,10 @@ import timber.log.Timber
 
 @HiltViewModel
 class ReportViewModel @Inject
-constructor(private val repository: RetrofitRepository) : ViewModel() {
+constructor(
+    private val repository: RetrofitRepository,
+    private val authService: AuthService
+) : ViewModel() {
     private val _runs
             = MutableStateFlow<List<RunModel>>(emptyList())
     val uiRuns: StateFlow<List<RunModel>>
@@ -23,6 +27,7 @@ constructor(private val repository: RetrofitRepository) : ViewModel() {
     var isErr = mutableStateOf(false)
     var isLoading = mutableStateOf(false)
     var error = mutableStateOf(Exception())
+
 
 //    init {
 //        viewModelScope.launch {
@@ -38,7 +43,7 @@ constructor(private val repository: RetrofitRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 isLoading.value = true
-                _runs.value = repository.getAll()
+                _runs.value = repository.getAll(authService.email!!)
                 isErr.value = false
                 isLoading.value = false
             }
@@ -53,7 +58,7 @@ constructor(private val repository: RetrofitRepository) : ViewModel() {
 
     fun deleteRun(run: RunModel) {
         viewModelScope.launch {
-               repository.delete(run)
+            repository.delete(authService.email!!,run)
         }
     }
 }
