@@ -26,7 +26,7 @@ import ie.setu.placemark.ui.theme.RunHunTheme
 @Composable
 fun OptionsScreen(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController()
+    navController: NavController
 ) {
     Column(
         modifier = modifier.background(MaterialTheme.colorScheme.secondary),
@@ -53,7 +53,9 @@ fun OptionsScreen(
                     text = stringResource(R.string.options_message)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { navController.navigate("achievements") }) {
+                Button(onClick = {
+                    navController.navigate(ie.setu.placemark.navigation.Achievements.route)
+                }) {
                     Icon(painter = painterResource(id = R.drawable.ic_achievements), contentDescription = "Achievements Icon")
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Achievements")
@@ -81,10 +83,10 @@ fun OptionsScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun OptionsScreenPreview() {
-    RunHunTheme {
-        OptionsScreen(modifier = Modifier)
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun OptionsScreenPreview() {
+//    RunHunTheme {
+//        OptionsScreen(modifier = Modifier)
+//    }
+//}

@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ie.setu.placemark.ui.screens.about.AboutScreen
-//import ie.setu.placemark.ui.screens.achievements.AchievementsScreen
+import ie.setu.placemark.ui.screens.achievements.AchievementsScreen
 import ie.setu.placemark.ui.screens.home.HomeScreen
 import ie.setu.placemark.ui.screens.login.LoginScreen
 import ie.setu.placemark.ui.screens.profile.ProfileScreen
@@ -54,8 +54,10 @@ fun NavHostProvider(
 
         //ui screenn for options
         composable(route = Options.route) {
-            //call our 'Option' Screen Here
-            OptionsScreen(modifier = modifier)
+            OptionsScreen(
+                modifier = modifier,
+                navController = navController
+            )
         }
 
         //ui screenn for about
@@ -102,23 +104,18 @@ fun NavHostProvider(
             )
         }
 
-//        composable(route = Achievements.route) {
-//            ProfileScreen(
-//                onSignOut = {
-//                    navController.popBackStack()
-//                    navController.navigate(Login.route) {
-//                        popUpTo(Home.route) { inclusive = true }
-//                    }
-//                },
-//            )
-//        }
-
+        composable(route = Achievements.route) {
+            //call our 'Achievements' Screen Here
+            AchievementsScreen(
+                modifier = modifier,
+                onClickRunDetails = { runId: String ->
+                    navController.navigateToRunDetails(runId)
+                },
+            )
+        }
     }
 }
 private fun NavHostController.navigateToRunDetails(runId: String) {
     this.navigate("details/$runId")
 }
 
-private fun NavHostController.navigateToAchievements(runId: String) {
-    this.navigate("details/$runId")
-}

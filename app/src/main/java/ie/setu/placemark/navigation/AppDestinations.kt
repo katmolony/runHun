@@ -79,13 +79,9 @@ object Register : AppDestination {
 }
 
 object Achievements : AppDestination {
-    override val icon = Icons.Filled.Details
+    override val icon = Icons.Default.AccountCircle
     override val label = "Achievements"
-    const val idArg = "id"
-    override val route = "achievements/{$idArg}"
-    val arguments = listOf(
-        navArgument(idArg) {type = NavType.StringType }
-    )
+    override val route = "Achievements"
 }
 
 val bottomAppBarDestinations = listOf(Run, Report, Options, Profile)

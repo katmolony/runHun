@@ -1,71 +1,113 @@
-//package ie.setu.placemark.ui.components.achievements
-//
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.Star
-//import androidx.compose.material3.*
-//import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.LaunchedEffect
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.tooling.preview.Preview
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import ie.setu.placemark.data.model.RunModel
-//import ie.setu.placemark.data.model.fakeRuns
-//import ie.setu.placemark.ui.theme.RunHunTheme
-//import java.text.DateFormat
-//import java.util.Date
-//import androidx.hilt.navigation.compose.hiltViewModel
-//import ie.setu.placemark.ui.components.general.ShowError
-//import ie.setu.placemark.ui.components.general.ShowLoader
-//import ie.setu.placemark.ui.screens.achievements.AchievementsViewModel
-//
-//@Composable
-//fun AchievementsScreen(
-//    achievementsViewModel: AchievementsViewModel = hiltViewModel()
-//) {
-//    val mostRecentRun = achievementsViewModel.mostRecentRun.value
-//    val longestRun = achievementsViewModel.longestRun.value
-//    val isLoading = achievementsViewModel.isLoading.value
-//    val isError = achievementsViewModel.isError.value
-//    val error = achievementsViewModel.error.value
-//
-//    LaunchedEffect(Unit) {
-//        achievementsViewModel.getAchievements()
-//    }
-//
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        if (isLoading) {
-//            ShowLoader("Loading Achievements...")
-//        } else if (isError) {
-//            ShowError(
-//                headline = "Error fetching achievements",
-//                subtitle = error.message ?: "Unknown error",
-//                onClick = { achievementsViewModel.getAchievements() }
-//            )
-//        } else {
-//            if (mostRecentRun != null) {
-//                AchievementCard(
-//                    title = "Most Recent Run",
-//                    message = mostRecentRun.message,
-//                    distanceAmount = mostRecentRun.distanceAmount,
-//                    unitType = mostRecentRun.unitType,
-//                    dateRan = mostRecentRun.dateRan
-//                )
-//                Spacer(modifier = Modifier.height(16.dp))
-//            }
-//
-//            if (longestRun != null) {
-//                AchievementCard(
-//                    title = "Longest Run",
-//                    message = longestRun.message,
-//                    distanceAmount = longestRun.distanceAmount,
-//                    unitType = longestRun.unitType,
-//                    dateRan = longestRun.dateRan
-//                )
-//            }
-//        }
-//    }
-//}
+package ie.setu.placemark.ui.screens.achievements
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import ie.setu.placemark.R
+import ie.setu.placemark.data.model.RunModel
+import ie.setu.placemark.data.model.fakeRuns
+import ie.setu.placemark.ui.components.general.Centre
+import ie.setu.placemark.ui.components.general.ShowError
+import ie.setu.placemark.ui.components.general.ShowLoader
+import ie.setu.placemark.ui.components.general.ShowRefreshList
+import ie.setu.placemark.ui.components.report.RunCardList
+import ie.setu.placemark.ui.components.report.ReportText
+import ie.setu.placemark.ui.theme.RunHunTheme
+import ie.setu.placemark.ui.components.achievements.AchievementsCard
+import androidx.compose.foundation.layout.Spacer
+import java.text.DateFormat
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+
+@Composable
+fun AchievementsScreen(
+    modifier: Modifier = Modifier,
+    onClickRunDetails: (String) -> Unit,
+    viewModel: AchievementsViewModel = hiltViewModel()
+) {
+    val runs = viewModel.uiRuns.collectAsState().value
+    val mostRecentRun = viewModel.mostRecentRun.collectAsState().value
+    val longestRun = viewModel.longestRun.collectAsState().value
+
+    val isError = viewModel.isError.value
+    val isLoading = viewModel.isLoading.value
+    val error = viewModel.error.value
+
+    LaunchedEffect(Unit) {
+        viewModel.getRuns()
+    }
+
+    Column(
+        modifier = modifier.padding(16.dp)
+    ) {
+        if (isLoading) {
+            ShowLoader("Loading Achievements...")
+        } else if (isError) {
+            ShowError(
+                headline = "Error occurred",
+                subtitle = "$error.message Unknown error",
+                onClick = { viewModel.getRuns() }
+            )
+        } else {
+            if (mostRecentRun == null && longestRun == null) {
+                Centre(Modifier.fillMaxSize()) {
+                    Text(
+                        text = stringResource(R.string.empty_list),
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            color = MaterialTheme.colorScheme.secondary,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                    )
+                }
+            } else {
+                mostRecentRun?.let { run ->
+                    Text(
+                        text = "Most Recent Run",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    AchievementsCard(
+                        unitType = run.unitType ?: "N/A",
+                        distanceAmount = run.distanceAmount ?: 0,
+                        message = run.message ?: "No message",
+                        dateRan = DateFormat.getDateInstance().format(run.dateRan),
+                        onClickRunDetails = { onClickRunDetails(run._id) }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                longestRun?.let { run ->
+                    Text(
+                        text = "Longest Distance Run",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    AchievementsCard(
+                        unitType = run.unitType ?: "N/A",
+                        distanceAmount = run.distanceAmount ?: 0,
+                        message = run.message ?: "No message",
+                        dateRan = DateFormat.getDateInstance().format(run.dateRan),
+                        onClickRunDetails = { onClickRunDetails(run._id) }
+                    )
+                }
+            }
+        }
+    }
+}
