@@ -33,6 +33,7 @@ constructor(
                 repository.insert(authService.email!!, run)
                 isErr.value = false
                 isLoading.value = false
+                timber.log.Timber.i("Run Inserted for ${authService.email!!}")
             } catch (e: Exception) {
                 isErr.value = true
                 error.value = e

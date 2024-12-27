@@ -31,10 +31,11 @@ constructor(private val serviceApi: RunService)  {
         }
     }
 
-    suspend fun insert(email : String, run: RunModel) : RunWrapper
-    {
+    suspend fun insert(email: String, run: RunModel): RunWrapper {
+        // Ensure the run's email is set to the provided email before sending the request
+        val updatedRun = run.copy(email = email)
         return withContext(Dispatchers.IO) {
-            val wrapper = serviceApi.post(email, run)
+            val wrapper = serviceApi.post(email, updatedRun)
             wrapper
         }
     }
