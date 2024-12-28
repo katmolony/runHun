@@ -30,6 +30,8 @@ firebaseAuth = "23.1.0"
 #V5
 playServicesAuth = "21.2.0"
 firebaseAuthKtx = "23.1.0"
+#Charts
+mpandroidchart = "v3.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -76,6 +78,9 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 
 #Firebase
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+
+#Charts
+mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

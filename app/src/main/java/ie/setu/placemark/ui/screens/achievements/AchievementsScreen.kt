@@ -32,7 +32,9 @@ import ie.setu.placemark.ui.components.achievements.AchievementsCard
 import androidx.compose.foundation.layout.Spacer
 import java.text.DateFormat
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import ie.setu.placemark.ui.components.achievements.RunGraph
 
 @Composable
 fun AchievementsScreen(
@@ -106,6 +108,14 @@ fun AchievementsScreen(
                         dateRan = DateFormat.getDateInstance().format(run.dateRan),
                         onClickRunDetails = { onClickRunDetails(run._id) }
                     )
+                }
+                Text(
+                    text = "Weekly Runs",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Column {
+                    RunGraph(runs = runs, modifier = Modifier.fillMaxWidth().height(300.dp))
                 }
             }
         }
