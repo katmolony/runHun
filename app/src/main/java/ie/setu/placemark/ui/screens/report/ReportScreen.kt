@@ -1,7 +1,9 @@
 package ie.setu.placemark.ui.screens.report
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +27,8 @@ import ie.setu.placemark.ui.components.general.Centre
 import ie.setu.placemark.ui.components.general.ShowError
 import ie.setu.placemark.ui.components.general.ShowLoader
 import ie.setu.placemark.ui.components.general.ShowRefreshList
+import ie.setu.placemark.ui.components.profile.ProfileCard
+import ie.setu.placemark.ui.components.profile.UserProfile
 import ie.setu.placemark.ui.components.report.RunCardList
 import ie.setu.placemark.ui.components.report.ReportText
 import ie.setu.placemark.ui.theme.RunHunTheme
@@ -36,6 +40,8 @@ fun ReportScreen(
     reportViewModel: ReportViewModel = hiltViewModel()) {
 
     val runs = reportViewModel.uiRuns.collectAsState().value
+
+    val userProfile = reportViewModel.userProfile.value
 
     val isError = reportViewModel.isErr.value
     val isLoading = reportViewModel.isLoading.value
@@ -52,6 +58,22 @@ fun ReportScreen(
                 end = 24.dp
             ),
         ) {
+
+            Spacer(modifier = Modifier.height(10.dp))
+            // Display profile card with user data if userProfile is not null
+            if (userProfile != null) {
+                ProfileCard(
+                    profile = UserProfile(
+                        totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
+                        totalRuns = userProfile.totalRuns ?: 0,
+                        averagePace = userProfile.averagePace ?: 0.0,
+                        preferredUnit = userProfile.preferredUnit ?: "km"
+                    ),
+                    onClickEdit = {}
+                )
+            }
+
+//            Spacer(modifier = Modifier.height(10.dp))
             if(isLoading) ShowLoader("Loading Runs...")
             ReportText()
             if(!isError)

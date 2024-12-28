@@ -32,7 +32,7 @@ fun ProfileScreen(
     loginViewModel: LoginViewModel = hiltViewModel(),
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
-    val userProfile = profileViewModel.userProfile.value  // Access the current value of userProfile
+    val userProfile = profileViewModel.userProfile.value
 
     Column(
         modifier = Modifier
