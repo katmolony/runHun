@@ -8,6 +8,10 @@ Run is an Android application for tracking and managing exercise details. The ap
 - Update exercise messages
 - Store data using Room database
 - Dependency injection with Dagger Hilt
+- Display weekly run statistics using MPAndroidChart
+- Authentication with Firebase
+- Navigation with Jetpack Navigation Compose
+- Material Design 3 (Material You) components
 
 ## Installation
 
@@ -35,6 +39,10 @@ Run is an Android application for tracking and managing exercise details. The ap
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - [Dagger Hilt](https://dagger.dev/hilt/)
 - [Room](https://developer.android.com/training/data-storage/room)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [Firebase](https://firebase.google.com/)
+- [Jetpack Navigation Compose](https://developer.android.com/jetpack/compose/navigation)
+- [Material Design 3](https://m3.material.io/)
 
 ## License
 
