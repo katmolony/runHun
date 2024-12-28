@@ -7,13 +7,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
 import ie.setu.placemark.firebase.services.AuthService
+import ie.setu.placemark.firebase.services.FirestoreService
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RunViewModel @Inject
 constructor(
-    private val repository: RetrofitRepository,
+    private val repository: FirestoreService,
     private val authService: AuthService
 )
     : ViewModel() {

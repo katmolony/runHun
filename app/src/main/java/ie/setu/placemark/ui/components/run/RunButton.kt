@@ -57,9 +57,9 @@ fun RunButton(
 
     val isError = runViewModel.isErr.value
     val error = runViewModel.error.value
-    val isLoading = runViewModel.isLoading.value
+//    val isLoading = runViewModel.isLoading.value
 
-    if(isLoading) ShowLoader("Trying to Add a Run...")
+//    if(isLoading) ShowLoader("Trying to Add a Run...")
 
 
     Row {
@@ -117,8 +117,8 @@ fun RunButton(
     if(isError)
         Toast.makeText(context,"Unable to add Run at this Time...",
             Toast.LENGTH_SHORT).show()
-    else
-        reportViewModel.getRuns()
+//    else
+//        reportViewModel.getRuns()
 
 }
 

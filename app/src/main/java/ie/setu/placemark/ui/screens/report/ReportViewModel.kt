@@ -8,6 +8,7 @@ import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
 import ie.setu.placemark.data.model.UserProfileModel
 import ie.setu.placemark.firebase.services.AuthService
+import ie.setu.placemark.firebase.services.FirestoreService
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,15 +19,15 @@ import timber.log.Timber
 @HiltViewModel
 class ReportViewModel @Inject
 constructor(
-    private val repository: RetrofitRepository,
+    private val repository: FirestoreService,
     private val authService: AuthService
 ) : ViewModel() {
     private val _runs
             = MutableStateFlow<List<RunModel>>(emptyList())
     val uiRuns: StateFlow<List<RunModel>>
             = _runs.asStateFlow()
-    var isErr = mutableStateOf(false)
-    var isLoading = mutableStateOf(false)
+    var iserror = mutableStateOf(false)
+    var isloading = mutableStateOf(false)
     var error = mutableStateOf(Exception())
 
     // Use mutableStateOf for userProfile
@@ -41,42 +42,44 @@ constructor(
     fun getRuns() {
         viewModelScope.launch {
             try {
-                isLoading.value = true
-                _runs.value = repository.getAll(authService.email!!)
-                isErr.value = false
-                isLoading.value = false
+                isloading.value = true
+                repository.getAll(authService.email!!).collect { items ->
+                    _runs.value = items
+                    iserror.value = false
+                    isloading.value = false
+                }
+                Timber.i("DVM RVM = : ${_runs.value}")
             }
             catch(e:Exception) {
-                isErr.value = true
-                isLoading.value = false
+                iserror.value = true
+                isloading.value = false
                 error.value = e
                 Timber.i("RVM Error ${e.message}")
             }
         }
     }
 
-    fun deleteRun(run: RunModel) {
-        viewModelScope.launch {
-            repository.delete(authService.email!!,run)
+    fun deleteRun(run: RunModel)
+        = viewModelScope.launch {
+            repository.delete(authService.email!!,run._id)
         }
-    }
+
+
 
     fun getUserProfiles() {
         viewModelScope.launch {
             try {
-                isLoading.value = true
-                Timber.i("Fetching profile") // Log the ID
-                // Fetch the user profile and update the state
-                val fetchedProfile = repository.getUserProfile(authService.email!!)
-                Timber.i("Profile fetched: $fetchedProfile") // Log the response
-                userProfile.value = fetchedProfile  // Update the state
-                isErr.value = false
-                isLoading.value = false
+                isloading.value = true
+                val userProfileItem = repository.getUserProfile(authService.email!!)
+                userProfile.value = userProfileItem
+                iserror.value = false
+                isloading.value = false
+                Timber.i("DVM RVM = : ${userProfile.value}")
             } catch (e: Exception) {
-                Timber.i("DetailsViewModel. Error fetching run: ${e.message}", e) // Log the error
-                isErr.value = true
+                iserror.value = true
+                isloading.value = false
                 error.value = e
-                isLoading.value = false
+                Timber.i("RVM Error ${e.message}")
             }
         }
     }

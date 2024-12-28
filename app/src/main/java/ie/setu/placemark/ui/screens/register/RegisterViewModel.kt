@@ -12,6 +12,7 @@ import ie.setu.placemark.data.rules.Validator
 import ie.setu.placemark.firebase.auth.Response
 import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirebaseSignInResponse
+import ie.setu.placemark.firebase.services.FirestoreService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val repository: RetrofitRepository,
+    private val repository: FirestoreService,
     private val auth: FirebaseAuth,
     private val authService: AuthService,
 )

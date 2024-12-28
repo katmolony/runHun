@@ -43,13 +43,13 @@ fun ReportScreen(
 
     val userProfile = reportViewModel.userProfile.value
 
-    val isError = reportViewModel.isErr.value
-    val isLoading = reportViewModel.isLoading.value
+    val isError = reportViewModel.iserror.value
+    val isLoading = reportViewModel.isloading.value
     val error = reportViewModel.error.value
 
-    LaunchedEffect(Unit) {
-        reportViewModel.getRuns()
-    }
+//    LaunchedEffect(Unit) {
+//        reportViewModel.getRuns()
+//    }
 
     Column {
         Column(
@@ -76,8 +76,8 @@ fun ReportScreen(
 //            Spacer(modifier = Modifier.height(10.dp))
             if(isLoading) ShowLoader("Loading Runs...")
             ReportText()
-            if(!isError)
-                ShowRefreshList(onClick = { reportViewModel.getRuns() })
+//            if(!isError)
+//                ShowRefreshList(onClick = { reportViewModel.getRuns() })
             if (runs.isEmpty() && !isError)
             Centre(Modifier.fillMaxSize()) {
                     Text(
@@ -96,7 +96,7 @@ fun ReportScreen(
                     onDeleteRun = { run: RunModel ->
                         reportViewModel.deleteRun(run)
                     },
-                    onRefreshList = { reportViewModel.getRuns() }
+//                    onRefreshList = { reportViewModel.getRuns() }
                 )
             }
             if (isError) {
@@ -147,7 +147,7 @@ fun PreviewReportScreen(modifier: Modifier = Modifier,
                     runs = runs,
                     onDeleteRun = {},
                     onClickRunDetails = { },
-                    onRefreshList = { }
+//                    onRefreshList = { }
                 )
         }
     }
