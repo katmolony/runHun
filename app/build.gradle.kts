@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -104,4 +105,6 @@ dependencies {
     // MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
 
+    //Firebase
+    implementation(libs.firebase.firestore)
 }
