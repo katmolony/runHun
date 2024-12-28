@@ -9,6 +9,7 @@ import ie.setu.placemark.data.api.RetrofitRepository
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.model.UserProfileModel
 import ie.setu.placemark.firebase.services.AuthService
+import ie.setu.placemark.firebase.services.FirestoreService
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import timber.log.Timber
@@ -17,7 +18,7 @@ import timber.log.Timber
 class ProfileViewModel @Inject constructor(
     private val authService: AuthService,
     private val auth: FirebaseAuth,
-    private val repository: RetrofitRepository,
+    private val repository: FirestoreService,
 ) : ViewModel() {
 
     val displayName get() = auth.currentUser?.displayName.toString()
