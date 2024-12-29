@@ -47,6 +47,8 @@ constructor(private val auth: AuthService,
         firestore.collection(RUN_COLLECTION)
             .add(runWithEmail)
             .await()
+//        update user stats
+        calculateAndUpdateUserStats(email)
 
     }
 
@@ -57,6 +59,9 @@ constructor(private val auth: AuthService,
         firestore.collection(RUN_COLLECTION)
             .document(run._id)
             .set(run).await()
+
+        //        update user stats
+        calculateAndUpdateUserStats(email)
     }
 
     override suspend fun delete(email: String,
@@ -65,6 +70,9 @@ constructor(private val auth: AuthService,
         firestore.collection(RUN_COLLECTION)
             .document(runId)
             .delete().await()
+
+        //        update user stats
+        calculateAndUpdateUserStats(email)
     }
 
     override suspend fun getLongestRun(email: String): Run? {
@@ -169,5 +177,41 @@ constructor(private val auth: AuthService,
         Timber.i("Fetched user ID: $userId")
         storeUserId(userId)
         return userId
+    }
+
+    suspend fun calculateAndUpdateUserStats(email: String) {
+        val firestore = FirebaseFirestore.getInstance()
+
+        val runsQuery = firestore.collection(RUN_COLLECTION)
+            .whereEqualTo("email", email)
+            .get()
+            .await()
+
+        val runs = runsQuery.documents.mapNotNull { it.toObject(Run::class.java) }
+
+        // Calculate the statistics for the user
+        val totalDistanceRun = runs.sumOf { it.distanceAmount.toDouble() }
+        val totalRuns = runs.size
+        val averagePace = if (totalRuns > 0) totalDistanceRun / totalRuns else 0.0
+
+        val userProfileQuery = firestore.collection(USER_COLLECTION)
+            .whereEqualTo("email", email)
+            .get()
+            .await()
+        val userProfileRef = userProfileQuery.documents.firstOrNull()?.reference
+
+        if (userProfileRef != null) {
+            firestore.runTransaction { transaction ->
+                transaction.update(userProfileRef, mapOf(
+                    "totalDistanceRun" to totalDistanceRun,
+                    "totalRuns" to totalRuns,
+                    "averagePace" to averagePace
+                ))
+            }.await()
+
+            Timber.i("User stats updated successfully for $email")
+        } else {
+            throw IllegalStateException("User profile not found for email: $email")
+        }
     }
 }
