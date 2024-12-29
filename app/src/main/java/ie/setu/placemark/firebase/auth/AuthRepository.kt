@@ -13,16 +13,15 @@ import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirebaseSignInResponse
 import ie.setu.placemark.firebase.services.FirestoreService
 import ie.setu.placemark.firebase.services.SignInWithGoogleResponse
+import ie.setu.placemark.ui.screens.login.LoginViewModel
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
-class AuthRepository
-@Inject constructor(
+class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-//    private val context: Context
-)
-    : AuthService {
+    private val firestoreRepository: FirestoreRepository
+) : AuthService {
 
     override val currentUserId: String
         get() = firebaseAuth.currentUser?.uid.orEmpty()
@@ -84,16 +83,37 @@ class AuthRepository
             Response.Failure(e)
         }
     }
-    override suspend fun authenticateGoogleUser(googleIdToken: String) : FirebaseSignInResponse {
+    override suspend fun authenticateGoogleUser(googleIdToken: String): FirebaseSignInResponse {
         return try {
             val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
             val result = firebaseAuth.signInWithCredential(firebaseCredential).await()
-            Response.Success(result.user!!)
+            val user = result.user
+
+            if (user != null) {
+                val userExists = firestoreRepository.userExists(user.uid)
+                if (!userExists) {
+                    val userProfile = UserProfileModel(
+                        userId = 0,
+                        name = user.displayName ?: "Google User",
+                        email = user.email ?: "",
+                        profilePictureUrl = "",
+                        totalDistanceRun = 0.0,
+                        totalRuns = 0,
+                        averagePace = 0.0,
+                        preferredUnit = "km"
+                    )
+                    firestoreRepository.createGoogleUserProfile(userProfile)
+                }
+            }
+
+            Response.Success(user!!)
         } catch (e: Exception) {
             e.printStackTrace()
             Response.Failure(e)
         }
     }
+
+
 
     override suspend fun firebaseSignInWithGoogle(
         googleCredential: AuthCredential
@@ -130,7 +150,7 @@ class AuthRepository
 //                    preferredUnit = "km" // Default if null
 //                )
 //
-//                val result = FirestoreService.createUserProfile(userProfile)
+//                val result = FirestoreRepository.createUserProfile(userProfile)
 //                Timber.i("RegisterViewModel, User profile creation result: $result") // Log the result
 //                Response.Success(true)
 //            } catch (e: Exception) {

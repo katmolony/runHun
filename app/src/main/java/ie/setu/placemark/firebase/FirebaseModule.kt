@@ -43,18 +43,21 @@ object FirebaseModule {
     )
 
     @Provides
+    fun provideAuthRepository(
+        firebaseAuth: FirebaseAuth,
+        firestoreRepository: FirestoreRepository // Pass FirestoreRepository
+    ): AuthService = AuthRepository(
+        firebaseAuth = firebaseAuth,
+        firestoreRepository = firestoreRepository
+    )
+
+    @Provides
     fun provideGoogleSignInOptions(
         app: Application
     ) = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(app.getString(R.string.web_client_id))
         .requestEmail()
         .build()
-
-    @Provides
-    fun provideAuthRepository(
-        auth: FirebaseAuth
-    ): AuthService = AuthRepository(
-        firebaseAuth = auth)
 
     @Provides
     fun provideCredentialManager(

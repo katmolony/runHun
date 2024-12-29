@@ -19,12 +19,31 @@ import javax.inject.Inject
 import com.google.firebase.firestore.toObject
 import timber.log.Timber
 
-class FirestoreRepository
-@Inject
-constructor(private val auth: AuthService,
-            private val firestore: FirebaseFirestore,
-            private val context: Context
+interface AuthHelper {
+    fun getCurrentUserId(): String?
+    // Add any other methods FirestoreRepository needs
+}
+
+// Modify AuthRepository to implement AuthHelper
+class AuthRepository @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
+) : AuthService, AuthHelper {
+    override fun getCurrentUserId(): String? {
+        return firebaseAuth.currentUser?.uid
+    }
+    // Other methods
+}
+
+// Modify FirestoreRepository to use AuthHelper
+class FirestoreRepository @Inject constructor(
+    private val authHelper: AuthHelper,
+    private val firestore: FirebaseFirestore,
+    private val context: Context
 ) : FirestoreService {
+    fun getUserData() {
+        val userId = authHelper.getCurrentUserId()
+        // Use userId to fetch data
+    }
 
     override suspend fun getAll(email: String): Runs {
 
@@ -214,4 +233,31 @@ constructor(private val auth: AuthService,
             throw IllegalStateException("User profile not found for email: $email")
         }
     }
+
+    suspend fun userExists(userId: String): Boolean {
+        return try {
+            val document = firestore.collection(USER_COLLECTION).document(userId).get().await()
+            document.exists()
+        } catch (e: Exception) {
+            Timber.e("Error checking if user exists: ${e.message}")
+            false
+        }
+    }
+
+    suspend fun createGoogleUserProfile(user: User): Boolean {
+        return try {
+            val documentReference = firestore.collection(USER_COLLECTION)
+                .add(user)
+                .await()
+            val userId = documentReference.id
+            Timber.i("Stored Google user ID: $userId") // Log the user ID
+            storeUserId(userId) // Store the user ID in SharedPreferences
+            true
+        } catch (e: Exception) {
+            Timber.e("Error creating Google user profile: ${e.message}")
+            false
+        }
+    }
+
 }
+
