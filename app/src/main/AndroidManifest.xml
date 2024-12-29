@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RunHun"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.auth.api.signin.v2.client_id"
+            android:value="471566779669-d99v594gcvtoa7p4q41v0e0c0drcr92e.apps.googleusercontent.com" />
         <activity
             android:name=".RunHunMainActivity"
             android:exported="true"

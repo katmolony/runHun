@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ie.setu.placemark.RunHunMainActivity
 import ie.setu.placemark.ui.screens.about.AboutScreen
 import ie.setu.placemark.ui.screens.achievements.AchievementsScreen
 import ie.setu.placemark.ui.screens.home.HomeScreen
@@ -75,10 +77,11 @@ fun NavHostProvider(
         }
 
         composable(route = Register.route) {
-            //call our 'Register' Screen Here
+            val context = LocalContext.current
             RegisterScreen(
                 navController = navController,
-                onRegister = { navController.popBackStack() }
+                onRegister = { navController.popBackStack() },
+                signInWithGoogle = { (context as RunHunMainActivity).signIn() }
             )
         }
 

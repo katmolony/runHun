@@ -12,7 +12,20 @@
           "package_name": "ie.setu.placemark"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "471566779669-tpfm9lveat2e3ur5j5ch8rsc0tgeqsk5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ie.setu.placemark",
+            "certificate_hash": "a07158dcacd6cb5a202d81d5f1235a71cf916a84"
+          }
+        },
+        {
+          "client_id": "471566779669-d99v594gcvtoa7p4q41v0e0c0drcr92e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBTHRh2PhdVqaO12efD-bA8_LmuSXiKUqQ"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471566779669-d99v594gcvtoa7p4q41v0e0c0drcr92e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

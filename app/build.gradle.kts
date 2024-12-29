@@ -107,5 +107,8 @@ dependencies {
 
     //Firebase
     implementation(libs.firebase.firestore)
+    implementation(libs.googleid)
 
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }

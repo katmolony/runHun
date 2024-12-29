@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.Button
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +36,7 @@ import ie.setu.placemark.ui.components.general.NormalTextComponent
 import ie.setu.placemark.ui.components.general.PasswordTextFieldComponent
 import ie.setu.placemark.ui.components.general.ShowLoader
 import ie.setu.placemark.R
+import ie.setu.placemark.RunHunMainActivity
 
 @Composable
 fun PreferredUnitSelection(
@@ -60,9 +62,11 @@ fun PreferredUnitSelection(
 fun RegisterScreen(
     onRegister: () -> Unit = {},
     navController: NavController,
-    registerViewModel: RegisterViewModel = hiltViewModel()
+    registerViewModel: RegisterViewModel = hiltViewModel(),
+    signInWithGoogle: () -> Unit
 ) {
     val registerFlow = registerViewModel.signupFlow.collectAsState()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -103,14 +107,11 @@ fun RegisterScreen(
                 PreferredUnitSelection(
                     currentUnit = registerViewModel.registrationUIState.value.preferredUnit,
                     onUnitSelected = {
-                        registerViewModel.onEvent(
-                            RegisterUIEvent.PreferredUnitChanged(
-                                it
-                            )
-                        )
+                        registerViewModel.onEvent(RegisterUIEvent.PreferredUnitChanged(it))
                     }
                 )
-                CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions),
+                CheckboxComponent(
+                    value = stringResource(id = R.string.terms_and_conditions),
                     onTextSelected = {},
                     onCheckedChange = {
                         registerViewModel.onEvent(RegisterUIEvent.PrivacyPolicyCheckBoxClicked(it))
@@ -126,6 +127,12 @@ fun RegisterScreen(
                     isEnabled = registerViewModel.allValidationsPassed.value
                 )
                 Spacer(modifier = Modifier.height(20.dp))
+                Button(onClick = {
+                    signInWithGoogle()
+                }) {
+                    Text(text = "Sign in with Google")
+                }
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
             if (registerViewModel.signUpInProgress.value) {
@@ -135,17 +142,6 @@ fun RegisterScreen(
 
         registerFlow.value?.let {
             when (it) {
-                is Response.Failure -> {
-                    val context = LocalContext.current
-                    Toast.makeText(context, it.e.message, Toast.LENGTH_LONG).show()
-                    navController.popBackStack()
-                    navController.navigate(Register.route)
-                }
-
-                is Response.Loading -> {
-                    ShowLoader(message = "Please Wait...")
-                }
-
                 is Response.Success -> {
                     LaunchedEffect(Unit) {
                         navController.navigate(Home.route) {
@@ -154,6 +150,12 @@ fun RegisterScreen(
                             }
                         }
                     }
+                }
+                is Response.Failure -> {
+                    Toast.makeText(context, "Sign-In Failed: ${it.e.message}", Toast.LENGTH_LONG).show()
+                }
+                is Response.Loading -> {
+                    ShowLoader(message = "Signing in...")
                 }
             }
         }

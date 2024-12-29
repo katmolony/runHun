@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.api.RetrofitRepository
 import ie.setu.placemark.data.model.UserProfileModel
@@ -16,6 +17,7 @@ import ie.setu.placemark.firebase.services.FirestoreService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -71,6 +73,30 @@ class RegisterViewModel @Inject constructor(
         Timber.i("RegisterViewModel, User profile creation result: $result") // Log the result
 
 //        _signupFlow.value = result
+    }
+
+    fun signInWithGoogle(token: String) = viewModelScope.launch {
+        _signupFlow.value = Response.Loading
+
+        val credential = GoogleAuthProvider.getCredential(token, null)
+        val result: FirebaseSignInResponse = try {
+            val authResult = auth.signInWithCredential(credential).await()
+            val user = authResult.user
+            if (user != null) {
+                Response.Success(user)
+            } else {
+                throw Exception("User is null")
+            }
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+
+        if (result is Response.Success) {
+            // Now that user is authenticated, create the profile
+            createUserProfile()
+        }
+
+        _signupFlow.value = result
     }
 
     fun onEvent(event: RegisterUIEvent) {
