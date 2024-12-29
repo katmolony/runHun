@@ -36,7 +36,7 @@ constructor(
 
     init {
         getRuns()
-//        getUserProfiles()
+        getUserProfiles()
     }
 
     fun getRuns() {

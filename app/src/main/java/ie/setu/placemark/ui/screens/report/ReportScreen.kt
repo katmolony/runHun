@@ -41,7 +41,7 @@ fun ReportScreen(
 
     val runs = reportViewModel.uiRuns.collectAsState().value
 
-//    val userProfile = reportViewModel.userProfile.value
+    val userProfile = reportViewModel.userProfile.value
 
     val isError = reportViewModel.iserror.value
     val isLoading = reportViewModel.isloading.value
@@ -61,17 +61,17 @@ fun ReportScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
             // Display profile card with user data if userProfile is not null
-//            if (userProfile != null) {
-//                ProfileCard(
-//                    profile = UserProfile(
-//                        totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
-//                        totalRuns = userProfile.totalRuns ?: 0,
-//                        averagePace = userProfile.averagePace ?: 0.0,
-//                        preferredUnit = userProfile.preferredUnit ?: "km"
-//                    ),
-//                    onClickEdit = {}
-//                )
-//            }
+            if (userProfile != null) {
+                ProfileCard(
+                    profile = UserProfile(
+                        totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
+                        totalRuns = userProfile.totalRuns ?: 0,
+                        averagePace = userProfile.averagePace ?: 0.0,
+                        preferredUnit = userProfile.preferredUnit ?: "km"
+                    ),
+                    onClickEdit = {}
+                )
+            }
 
 //            Spacer(modifier = Modifier.height(10.dp))
             if(isLoading) ShowLoader("Loading Runs...")
