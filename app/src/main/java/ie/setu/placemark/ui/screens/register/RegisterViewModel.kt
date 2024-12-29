@@ -51,7 +51,7 @@ class RegisterViewModel @Inject constructor(
         _signupFlow.value = result
     }
 
-    private fun createUserProfile() = viewModelScope.launch {
+    fun createUserProfile() = viewModelScope.launch {
        _signupFlow.value = Response.Loading
         Timber.i("RegisterViewModel Creating user profile...") // Add this log
 

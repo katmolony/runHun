@@ -31,6 +31,7 @@ import ie.setu.placemark.firebase.auth.Response
 import ie.setu.placemark.navigation.Home
 import ie.setu.placemark.navigation.Login
 import ie.setu.placemark.ui.components.general.ButtonComponent
+import ie.setu.placemark.ui.components.general.GoogleSignInButtonComponent
 import ie.setu.placemark.ui.components.general.HeadingLogoComponent
 import ie.setu.placemark.ui.components.general.HeadingTextComponent
 import ie.setu.placemark.ui.components.general.MyTextFieldComponent
@@ -98,6 +99,13 @@ fun LoginScreen(
                     isEnabled = loginViewModel.allValidationsPassed.value
                 )
                 isEnabled = loginViewModel.allValidationsPassed.value
+
+                // Google Button here
+                Spacer(modifier = Modifier.height(10.dp))
+                val context = LocalContext.current
+                GoogleSignInButtonComponent {
+                    loginViewModel.signInWithGoogleCredentials(context)
+                }
             }
         }
     }
@@ -154,7 +162,7 @@ fun PreviewLoginScreen() {
                     .fillMaxSize()
             ) {
 
-              //  NormalTextComponent(value = stringResource(id = R.string.login))
+                //  NormalTextComponent(value = stringResource(id = R.string.login))
                 HeadingTextComponent(value = stringResource(id = R.string.welcome))
                 Spacer(modifier = Modifier.height(10.dp))
                 HeadingLogoComponent()
@@ -190,8 +198,10 @@ fun PreviewLoginScreen() {
                     isEnabled = false
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+                GoogleSignInButtonComponent {
+                    //  loginViewModel.oneTapSignIn()
+                }
             }
         }
-
     }
 }

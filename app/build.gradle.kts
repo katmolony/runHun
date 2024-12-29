@@ -101,6 +101,7 @@ dependencies {
 
     //Firebase
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.googleid)
 
     // MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")

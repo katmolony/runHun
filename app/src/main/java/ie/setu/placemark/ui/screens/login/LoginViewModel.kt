@@ -13,10 +13,26 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.content.Context
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import timber.log.Timber
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
+import com.google.firebase.auth.GoogleAuthProvider
+import ie.setu.placemark.data.model.UserProfileModel
+import ie.setu.placemark.firebase.services.FirestoreService
+import ie.setu.placemark.ui.screens.register.RegisterViewModel
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     val authService: AuthService,
+    private val credentialManager: CredentialManager,
+    private val credentialRequest: GetCredentialRequest,
+    private val repository: FirestoreService,
 )
     : ViewModel() {
 
@@ -42,6 +58,12 @@ class LoginViewModel @Inject constructor(
 
         _loginFlow.value = Response.Loading
         val result = authService.authenticateUser(email, password)
+        _loginFlow.value = result
+    }
+
+    private fun loginGoogleUser(googleIdToken: String) = viewModelScope.launch {
+        _loginFlow.value = Response.Loading
+        val result = authService.authenticateGoogleUser(googleIdToken)
         _loginFlow.value = result
     }
 
@@ -86,6 +108,66 @@ class LoginViewModel @Inject constructor(
 
     fun resetLoginFlow() {
         _loginFlow.value = null
+    }
+    fun signInWithGoogleCredentials(credentialsContext : Context) {
+        viewModelScope.launch {
+            try {
+                val result = credentialManager.getCredential(
+                    request = credentialRequest,
+                    context = credentialsContext,
+                )
+                handleSignIn(result)
+            } catch (e: GetCredentialException) {
+                // handleFailure(e)
+            }
+        }
+    }
+//
+//    fun createUserProfile() = viewModelScope.launch {
+//        _loginFlow.value = Response.Loading
+//        Timber.i("RegisterViewModel Creating user profile...") // Add this log
+//
+//        val userProfile = UserProfileModel(
+//            userId = 0,
+//            name = "Google User",
+//            email = loginUIState.value.email ?: "",
+//            profilePictureUrl = "",
+//            totalDistanceRun = 0.0,
+//            totalRuns = 0,
+//            averagePace = 0.0,
+//            preferredUnit = "km" // Default if null
+//        )
+//
+////       val result = authService.createUserProfile(userProfile)
+//        val result = repository.createUserProfile(userProfile)
+//        Timber.i("RegisterViewModel, User profile creation result: $result") // Log the result
+//
+//        _loginFlow.value = result
+//    }
+
+    private fun handleSignIn(result: GetCredentialResponse) {
+        when (val credential = result.credential) {
+            is CustomCredential -> {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    try {
+                        val googleIdTokenCredential = GoogleIdTokenCredential
+                            .createFrom(credential.data)
+                        val googleIdToken = googleIdTokenCredential.idToken
+                        loginGoogleUser(googleIdToken)
+                    } catch (e: GoogleIdTokenParsingException) {
+                        Timber.tag("TAG").e(e, "Received an invalid google id token response")
+                    }
+                }
+//                else {
+//                    // Catch any unrecognized custom credential type here.
+//                    Timber.tag("TAG").e("Unexpected type of credential")
+//                }
+            }
+//            else -> {
+//                // Catch any unrecognized credential type here.
+//                Timber.tag("TAG").e("Unexpected type of credential")
+//            }
+        }
     }
 }
 
