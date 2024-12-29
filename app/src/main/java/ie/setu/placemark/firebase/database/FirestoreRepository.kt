@@ -1,6 +1,8 @@
 package ie.setu.placemark.firebase.database
 
+import android.content.Context
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.dataObjects
 import ie.setu.placemark.data.model.UserProfileModel
 import ie.setu.placemark.firebase.rules.Constants.RUN_COLLECTION
@@ -15,12 +17,13 @@ import kotlinx.coroutines.tasks.await
 import java.util.Date
 import javax.inject.Inject
 import com.google.firebase.firestore.toObject
-
+import timber.log.Timber
 
 class FirestoreRepository
 @Inject
 constructor(private val auth: AuthService,
-            private val firestore: FirebaseFirestore
+            private val firestore: FirebaseFirestore,
+            private val context: Context
 ) : FirestoreService {
 
     override suspend fun getAll(email: String): Runs {
@@ -64,34 +67,107 @@ constructor(private val auth: AuthService,
             .delete().await()
     }
 
+    override suspend fun getLongestRun(email: String): Run? {
+        return try {
+            val querySnapshot = FirebaseFirestore.getInstance()
+                .collection(RUN_COLLECTION)
+                .whereEqualTo("email", email)
+                .orderBy("distanceAmount", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .await()
+
+            querySnapshot.documents.firstOrNull()?.toObject(Run::class.java)
+        } catch (e: Exception) {
+            Timber.e("Error fetching longest run: ${e.message}")
+            null
+        }
+    }
+
+    override suspend fun getMostRecentRun(email: String): Run? {
+        return try {
+            val querySnapshot = FirebaseFirestore.getInstance()
+                .collection(RUN_COLLECTION)
+                .whereEqualTo("email", email)
+                .orderBy("dateRan", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .await()
+
+            querySnapshot.documents.firstOrNull()?.toObject(Run::class.java)
+        } catch (e: Exception) {
+            Timber.e("Error fetching most recent run: ${e.message}")
+            null
+        }
+    }
+
     // UserProfileModel-related methods
 
     override suspend fun getUserProfile(email: String): User? {
-        return firestore.collection(USER_COLLECTION)
-            .document(email)
-            .get()
-            .await()
-            .toObject(UserProfileModel::class.java)
+        val userId = getUserIdByEmail(email)
+        return if (userId != null) {
+            Timber.i("Fetched user ID: $userId")
+            val userProfile = firestore.collection(USER_COLLECTION)
+                .document(userId).get().await().toObject<User>()
+            Timber.i("Fetched user profile: $userProfile")
+            userProfile
+        } else {
+            Timber.e("User ID not found for email: $email")
+            null
+        }
     }
 
     override suspend fun createUserProfile(user: User) {
-        firestore.collection(USER_COLLECTION)
-            .document(user.email)  // Assuming 'email' is unique
-            .set(user)
+        val documentReference = firestore.collection(USER_COLLECTION)
+            .add(user)
             .await()
+        val userId = documentReference.id
+        Timber.i("Stored user ID: $userId") // Log the user ID
+        storeUserId(userId) // Store the user ID in SharedPreferences
     }
 
     override suspend fun updateUserProfile(email: String, user: User) {
-        firestore.collection(USER_COLLECTION)
-            .document(email)
-            .set(user)  // Update the entire document with the new data
-            .await()
+        val userId = getUserIdByEmail(email)
+        if (userId != null) {
+            Timber.i("Fetched user ID: $userId")
+            firestore.collection(USER_COLLECTION)
+                .document(userId)
+                .set(user)
+                .await()
+            Timber.i("Updated user profile for user ID: $userId")
+        } else {
+            Timber.e("User ID not found for email: $email")
+        }
     }
 
     override suspend fun deleteUserProfile(email: String) {
-        firestore.collection(USER_COLLECTION)
-            .document(email)
-            .delete()
+        val userId = getUserIdByEmail(email)
+        if (userId != null) {
+            Timber.i("Fetched user ID: $userId")
+            firestore.collection(USER_COLLECTION)
+                .document(userId)
+                .delete()
+                .await()
+            Timber.i("Deleted user profile for user ID: $userId")
+        } else {
+            Timber.e("User ID not found for email: $email")
+        }
+    }
+
+    private fun storeUserId(userId: String?) {
+        // Example using SharedPreferences
+        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("user_id", userId).apply()
+    }
+    suspend fun getUserIdByEmail(email: String): String? {
+        val querySnapshot = firestore.collection(USER_COLLECTION)
+            .whereEqualTo("email", email)
+            .get()
             .await()
+        val document = querySnapshot.documents.firstOrNull()
+        val userId = document?.id
+        Timber.i("Fetched user ID: $userId")
+        storeUserId(userId)
+        return userId
     }
 }

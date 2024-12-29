@@ -24,6 +24,7 @@ class ProfileViewModel @Inject constructor(
     val displayName get() = auth.currentUser?.displayName.toString()
     val photoUrl get() = auth.currentUser?.photoUrl.toString()
     val email get() = auth.currentUser?.email.toString()
+    val userId get() = auth.currentUser?.uid.toString()
 
     // Use mutableStateOf for userProfile
     var userProfile = mutableStateOf<UserProfileModel?>(null)
@@ -38,7 +39,7 @@ class ProfileViewModel @Inject constructor(
                 isLoading.value = true
                 Timber.i("Fetching profile") // Log the ID
                 // Fetch the user profile and update the state
-                val fetchedProfile = repository.getUserProfile(email)
+                val fetchedProfile = repository.getUserProfile(email)!!
                 Timber.i("Profile fetched: $fetchedProfile") // Log the response
                 userProfile.value = fetchedProfile  // Update the state
                 isErr.value = false

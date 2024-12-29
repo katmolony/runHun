@@ -11,10 +11,10 @@ data class UserProfileModel(
     val userId: Int = 0,
     @DocumentId val _id: String = "N/A",
     @SerializedName("name")
-    val name: String,
+    val name: String = "",
     @SerializedName("email")
-    val email: String,
-    val profilePictureUrl: String?,
+    val email: String = "",
+    val profilePictureUrl: String? = null,
     @SerializedName("totalDistanceRun")
     val totalDistanceRun: Double = 0.0,
     @SerializedName("totalRuns")
@@ -23,4 +23,7 @@ data class UserProfileModel(
     val averagePace: Double = 0.0,
     @SerializedName("preferredUnit")
     val preferredUnit: String = "km" // Default unit
-)
+) {
+    // No-argument constructor for Firestore
+    constructor() : this(0, "N/A", "", "", null, 0.0, 0, 0.0, "km")
+}

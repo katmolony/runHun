@@ -20,7 +20,10 @@ data class RunModel(
     @SerializedName("dateRan")
     val dateRan: Date = Date(),
     var email: String = "homer@gmail.com"
-)
+) {
+    // No-argument constructor for Firestore
+    constructor() : this(0, "", "", 0, "", Date(), "")
+}
 
 val fakeRuns = List(5) { i ->
     RunModel(id = 12345 + i,

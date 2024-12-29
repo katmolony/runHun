@@ -22,4 +22,8 @@ interface FirestoreService {
     suspend fun createUserProfile(user: User)
     suspend fun updateUserProfile(email: String, user: User)
     suspend fun deleteUserProfile(email: String)
+
+    suspend fun getLongestRun(email: String): Run?
+    suspend fun getMostRecentRun(email: String): Run?
+
 }

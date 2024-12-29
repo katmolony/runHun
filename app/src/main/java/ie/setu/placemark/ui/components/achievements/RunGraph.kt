@@ -40,33 +40,25 @@ fun RunGraph(runs: List<RunModel>, modifier: Modifier = Modifier) {
         },
         modifier = modifier
             .fillMaxWidth()
-            .height(300.dp) // Set the desired height here
+            .height(300.dp)
     ) { lineChart ->
         try {
-            val entries = runs.mapNotNull { run ->
-                val dateRan = run.dateRan
-                val distanceAmount = run.distanceAmount.toFloat()
-
-                if (distanceAmount >= 0) {
-                    Entry(dateRan.time.toFloat(), distanceAmount)
-                } else {
-                    null
-                }
+            val entries = runs.mapIndexed { index, run ->
+                Entry(index.toFloat(), run.distanceAmount.toFloat())
             }
+
             if (entries.isNotEmpty()) {
                 val dataSet = LineDataSet(entries, "Runs").apply {
                     color = Color.BLUE
                     valueTextColor = Color.BLACK
                 }
-                lineChart.data = LineData(dataSet)
 
-                // Customize the x-axis to show days of the week
-                // Set the x-axis labels (days of the week)
-                val dateFormat = SimpleDateFormat("EEE", Locale.getDefault()) // Day of week (e.g., Mon, Tue)
-                val daysOfWeek = runs.map { run ->
+                val dateFormat = SimpleDateFormat("EEE", Locale.getDefault())
+                val daysOfWeek = runs.mapIndexed { index, run ->
                     dateFormat.format(run.dateRan)
-                }.distinct() // Remove duplicates if any
+                }
 
+                lineChart.data = LineData(dataSet)
                 lineChart.xAxis.valueFormatter = DayOfWeekValueFormatter(daysOfWeek)
                 lineChart.invalidate()
             } else {

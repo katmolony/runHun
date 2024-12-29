@@ -1,5 +1,6 @@
 package ie.setu.placemark.firebase.auth
 
+import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -7,10 +8,14 @@ import ie.setu.placemark.data.model.UserProfileModel
 import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirebaseSignInResponse
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class AuthRepository
-@Inject constructor(private val firebaseAuth: FirebaseAuth)
+@Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+//    private val context: Context
+)
     : AuthService {
 
     override val currentUserId: String
@@ -28,6 +33,9 @@ class AuthRepository
     override suspend fun authenticateUser(email: String, password: String): FirebaseSignInResponse {
         return try {
                 val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+//                val userId = result.user?.uid
+//                // Store the userId in a session or state
+//                storeUserId(userId)
                 Response.Success(result.user!!)
         } catch (e: Exception) {
                 e.printStackTrace()
@@ -39,6 +47,9 @@ class AuthRepository
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             result.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())?.await()
+//            val userId = result.user?.uid
+            // Store the userId in a session or state
+//            storeUserId(userId)
             return Response.Success(result.user!!)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -66,4 +77,9 @@ class AuthRepository
         }
     }
 
+//    private fun storeUserId(userId: String?) {
+//        val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+//        sharedPreferences.edit().putString("user_id", userId).apply()
+//        Timber.i("Stored user ID: $userId")
+//    }
 }

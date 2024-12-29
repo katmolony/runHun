@@ -36,7 +36,7 @@ constructor(
 
     init {
         getRuns()
-        getUserProfiles()
+//        getUserProfiles()
     }
 
     fun getRuns() {
@@ -70,8 +70,8 @@ constructor(
         viewModelScope.launch {
             try {
                 isloading.value = true
-                val userProfileItem = repository.getUserProfile(authService.email!!)
-                userProfile.value = userProfileItem
+//                val userProfileItem = repository.getUserProfile(authService.email!!)
+                userProfile.value = repository.getUserProfile(authService.email!!)!!
                 iserror.value = false
                 isloading.value = false
                 Timber.i("DVM RVM = : ${userProfile.value}")
