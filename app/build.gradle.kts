@@ -109,4 +109,7 @@ dependencies {
     //Firebase
     implementation(libs.firebase.firestore)
 
+    //Coil
+    implementation(libs.coil.compose)
+
 }

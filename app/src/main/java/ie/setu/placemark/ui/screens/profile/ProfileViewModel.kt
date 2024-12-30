@@ -26,6 +26,8 @@ class ProfileViewModel @Inject constructor(
     val email get() = auth.currentUser?.email.toString()
     val userId get() = auth.currentUser?.uid.toString()
 
+    val photoUri get() = authService.customPhotoUri
+
     // Use mutableStateOf for userProfile
     var userProfile = mutableStateOf<UserProfileModel?>(null)
 
