@@ -20,6 +20,7 @@ import ie.setu.placemark.ui.components.general.ShowError
 import ie.setu.placemark.ui.components.general.ShowLoader
 import ie.setu.placemark.ui.components.achievements.AchievementsCard
 import ie.setu.placemark.ui.components.achievements.RunGraph
+import ie.setu.placemark.ui.components.badges.BadgeCarousel
 import java.text.DateFormat
 
 @Composable
@@ -28,21 +29,30 @@ fun AchievementsScreen(
     onClickRunDetails: (String) -> Unit,
     viewModel: AchievementsViewModel = hiltViewModel()
 ) {
+    val userProfile = viewModel.userProfile.value
     val runs = viewModel.uiRuns.collectAsState().value
-//    val mostRecentRun = viewModel.mostRecentRun.collectAsState().value
-//    val longestRun = viewModel.longestRun.collectAsState().value
-
     val longestRun by viewModel.longestRun.collectAsState()
     val mostRecentRun by viewModel.mostRecentRun.collectAsState()
-
     val isError = viewModel.iserror.value
     val isLoading = viewModel.isloading.value
     val error = viewModel.error.value
 
     LaunchedEffect(Unit) {
-        viewModel.getAchievements()
+        viewModel.fetchAchievements()
     }
+
     Column(modifier = modifier.padding(16.dp)) {
+        userProfile?.let {
+            Text(
+                text = "Your Achievements",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            BadgeCarousel(userProfile = it)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         mostRecentRun?.let { run ->
             Text(
                 text = "Most Recent Run",
@@ -75,95 +85,12 @@ fun AchievementsScreen(
             )
         }
         Text(
-                text = "Weekly Runs",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Column {
-                RunGraph(runs = runs, modifier = Modifier.fillMaxWidth().height(300.dp))
-            }
-
-
-        if (longestRun == null && mostRecentRun == null) {
-            Text(
-                text = "No runs found",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            text = "Weekly Runs",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Column {
+            RunGraph(runs = runs, modifier = Modifier.fillMaxWidth().height(300.dp))
         }
     }
 }
-//    Column(
-//        modifier = modifier.padding(16.dp)
-//    ) {
-//        if (isLoading) ShowLoader("Loading Achievements...")
-//        if (runs.isEmpty() && !isError)
-//            Centre(Modifier.fillMaxSize()) {
-//                Text(
-//                    color = MaterialTheme.colorScheme.secondary,
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 30.sp,
-//                    lineHeight = 34.sp,
-//                    textAlign = TextAlign.Center,
-//                    text = stringResource(R.string.empty_list)
-//                )
-//            }
-//        if (!isError) {
-//            mostRecentRun?.let { run ->
-//                Text(
-//                    text = "Most Recent Run",
-//                    style = MaterialTheme.typography.titleLarge,
-//                    modifier = Modifier.padding(bottom = 8.dp)
-//                )
-//                AchievementsCard(
-//                    unitType = run.unitType ?: "N/A",
-//                    distanceAmount = run.distanceAmount,
-//                    message = run.message ?: "No message",
-//                    dateRan = DateFormat.getDateInstance().format(run.dateRan),
-//                    onClickRunDetails = { onClickRunDetails(run._id) }
-//                )
-//            }
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            Text(
-//                text = mostRecentRun?.dateRan?.toString() ?: "No recent run found",
-//                style = MaterialTheme.typography.titleLarge
-//            )
-//            Text(
-//                text = longestRun?.distanceAmount?.toString() ?: "No longest run found",
-//                style = MaterialTheme.typography.titleLarge
-//            )
-//
-//            longestRun?.let { run ->
-//                Text(
-//                    text = "Longest Distance Run",
-//                    style = MaterialTheme.typography.titleLarge,
-//                    modifier = Modifier.padding(bottom = 8.dp)
-//                )
-//                AchievementsCard(
-//                    unitType = run.unitType ?: "N/A",
-//                    distanceAmount = run.distanceAmount,
-//                    message = run.message ?: "No message",
-//                    dateRan = DateFormat.getDateInstance().format(run.dateRan),
-//                    onClickRunDetails = { onClickRunDetails(run._id) }
-//                )
-//            }
-//
-//            Text(
-//                text = "Weekly Runs",
-//                style = MaterialTheme.typography.titleLarge,
-//                modifier = Modifier.padding(bottom = 8.dp)
-//            )
-//            Column {
-//                RunGraph(runs = runs, modifier = Modifier.fillMaxWidth().height(300.dp))
-//            }
-//        }
-//        if (isError) {
-//            ShowError(
-//                headline = error.message!! + " error...",
-//                subtitle = error.toString(),
-//                onClick = { viewModel.getAchievements() }
-//            )
-//        }
-//    }
-//}
