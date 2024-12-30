@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ie.setu.placemark.R
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.ui.components.general.HeadingTextComponent
+import ie.setu.placemark.ui.components.general.ShowPhotoPicker
 import ie.setu.placemark.ui.components.profile.UserProfile
 import ie.setu.placemark.ui.screens.login.LoginViewModel
 import ie.setu.placemark.ui.screens.register.RegisterViewModel
@@ -37,7 +38,9 @@ fun ProfileScreen(
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
     val userProfile = profileViewModel.userProfile.value
-    val photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
+//    val photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
+    var photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
+
 
     Column(
         Modifier.fillMaxSize(),
@@ -67,6 +70,13 @@ fun ProfileScreen(
                     displayName = profileViewModel.displayName,
                     email = profileViewModel.email
                 )
+
+            ShowPhotoPicker(
+                onPhotoUriChanged = {
+                    photoUri = it
+                    profileViewModel.updatePhotoUri(photoUri!!)
+                }
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 

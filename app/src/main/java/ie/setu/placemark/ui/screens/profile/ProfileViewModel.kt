@@ -1,5 +1,6 @@
 package ie.setu.placemark.ui.screens.profile
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -57,5 +58,9 @@ class ProfileViewModel @Inject constructor(
 
     fun signOut() {
         viewModelScope.launch { authService.signOut() }
+    }
+
+    fun updatePhotoUri(uri: Uri) {
+        viewModelScope.launch { authService.updatePhoto(uri) }
     }
 }

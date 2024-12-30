@@ -54,8 +54,13 @@ class AuthRepository
 
     override suspend fun createUser(name: String, email: String, password: String): FirebaseSignInResponse {
         return try {
+            val uri = Uri.parse("android.resource://ie.setu.placemark/drawable/run_logo")
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            result.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())?.await()
+            result.user?.updateProfile(UserProfileChangeRequest
+                .Builder()
+                .setDisplayName(name)
+                .setPhotoUri(uri)
+                .build())?.await()
 //            val userId = result.user?.uid
             // Store the userId in a session or state
 //            storeUserId(userId)
@@ -114,32 +119,6 @@ class AuthRepository
             Response.Failure(e)
         }
     }
-
-//    suspend fun addUserToFirestore(): Response<Boolean> {
-//        val firebaseUser = firebaseAuth.currentUser
-//        return if (firebaseUser != null) {
-//            try {
-//                val userProfile = UserProfileModel(
-//                    userId = 0,
-//                    name = firebaseUser.displayName ?: "",
-//                    email = firebaseUser.email ?: "",
-//                    profilePictureUrl = "",
-//                    totalDistanceRun = 0.0,
-//                    totalRuns = 0,
-//                    averagePace = 0.0,
-//                    preferredUnit = "km" // Default if null
-//                )
-//
-//                val result = FirestoreService.createUserProfile(userProfile)
-//                Timber.i("RegisterViewModel, User profile creation result: $result") // Log the result
-//                Response.Success(true)
-//            } catch (e: Exception) {
-//                Response.Failure(e)
-//            }
-//        } else {
-//            Response.Failure(Exception("No authenticated user available"))
-//        }
-//    }
 
     override suspend fun updatePhoto(uri: Uri) : FirebaseSignInResponse {
         return try {
