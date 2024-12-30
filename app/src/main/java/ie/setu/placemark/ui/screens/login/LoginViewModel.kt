@@ -68,8 +68,9 @@ class LoginViewModel @Inject constructor(
         if (result is Response.Success) {
             val user = result.data
             val email = user?.email ?: ""
-            Timber.i("LoginViewModel, Google user email: $email") // Log the email
-            createUserProfile(email)
+            val name = user?.displayName ?: ""
+            Timber.i("LoginViewModel, Google user email: $email, name: $name") // Log the email and name
+            createUserProfile(email, name)
         }
         _loginFlow.value = result
     }
@@ -130,12 +131,12 @@ class LoginViewModel @Inject constructor(
         }
     }
 //
-    fun createUserProfile(email: String) = viewModelScope.launch {
+    fun createUserProfile(email: String, name: String) = viewModelScope.launch {
         Timber.i("Login ViewModel Creating user profile...") // Add this log
 
         val userProfile = UserProfileModel(
             userId = 0,
-            name = "Google User",
+            name = name ?: "",
             email = email ?: "",
             profilePictureUrl = "",
             totalDistanceRun = 0.0,
