@@ -64,6 +64,13 @@ class LoginViewModel @Inject constructor(
     private fun loginGoogleUser(googleIdToken: String) = viewModelScope.launch {
         _loginFlow.value = Response.Loading
         val result = authService.authenticateGoogleUser(googleIdToken)
+
+        if (result is Response.Success) {
+            val user = result.data
+            val email = user?.email ?: ""
+            Timber.i("LoginViewModel, Google user email: $email") // Log the email
+            createUserProfile(email)
+        }
         _loginFlow.value = result
     }
 
@@ -123,27 +130,24 @@ class LoginViewModel @Inject constructor(
         }
     }
 //
-//    fun createUserProfile() = viewModelScope.launch {
-//        _loginFlow.value = Response.Loading
-//        Timber.i("RegisterViewModel Creating user profile...") // Add this log
-//
-//        val userProfile = UserProfileModel(
-//            userId = 0,
-//            name = "Google User",
-//            email = loginUIState.value.email ?: "",
-//            profilePictureUrl = "",
-//            totalDistanceRun = 0.0,
-//            totalRuns = 0,
-//            averagePace = 0.0,
-//            preferredUnit = "km" // Default if null
-//        )
-//
-////       val result = authService.createUserProfile(userProfile)
-//        val result = repository.createUserProfile(userProfile)
-//        Timber.i("RegisterViewModel, User profile creation result: $result") // Log the result
-//
-//        _loginFlow.value = result
-//    }
+    fun createUserProfile(email: String) = viewModelScope.launch {
+        Timber.i("Login ViewModel Creating user profile...") // Add this log
+
+        val userProfile = UserProfileModel(
+            userId = 0,
+            name = "Google User",
+            email = email ?: "",
+            profilePictureUrl = "",
+            totalDistanceRun = 0.0,
+            totalRuns = 0,
+            averagePace = 0.0,
+            preferredUnit = "km" // Default if null
+        )
+
+//       val result = authService.createUserProfile(userProfile)
+        val result = repository.createUserProfile(userProfile)
+        Timber.i("LoginViewModel, User profile creation result: $result") // Log the result
+    }
 
     private fun handleSignIn(result: GetCredentialResponse) {
         when (val credential = result.credential) {
