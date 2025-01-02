@@ -115,4 +115,7 @@ dependencies {
     implementation ("io.coil-kt:coil:2.4.0")
     implementation ("io.coil-kt:coil-svg:2.4.0")
 
+    //DarkMode
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
 }
