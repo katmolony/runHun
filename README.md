@@ -12,6 +12,7 @@ Run is an Android application for tracking and managing exercise details. The ap
 - Authentication with Firebase
 - Navigation with Jetpack Navigation Compose
 - Material Design 3 (Material You) components
+- Sorting of runs on the report screen
 
 ## Installation
 
