@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -100,8 +102,17 @@ dependencies {
 
     //Firebase
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.googleid)
 
     // MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:3.1.0")
+
+    //Firebase
+    implementation(libs.firebase.firestore)
+
+    //Coil
+    implementation(libs.coil.compose)
+    implementation ("io.coil-kt:coil:2.4.0")
+    implementation ("io.coil-kt:coil-svg:2.4.0")
 
 }

@@ -2,6 +2,7 @@ package ie.setu.placemark.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.DocumentId
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 import java.util.UUID
@@ -10,7 +11,7 @@ import java.util.UUID
 data class RunModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val _id: String =  UUID.randomUUID().toString(),
+    @DocumentId val _id: String = "N/A",
     @SerializedName("unitType")
     val unitType: String = "N/A",
     @SerializedName("distanceAmount")
@@ -19,7 +20,10 @@ data class RunModel(
     @SerializedName("dateRan")
     val dateRan: Date = Date(),
     var email: String = "homer@gmail.com"
-)
+) {
+    // No-argument constructor for Firestore
+    constructor() : this(0, "", "", 0, "", Date(), "")
+}
 
 val fakeRuns = List(5) { i ->
     RunModel(id = 12345 + i,

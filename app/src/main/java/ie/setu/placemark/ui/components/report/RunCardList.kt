@@ -18,7 +18,7 @@ internal fun RunCardList(
     modifier: Modifier = Modifier,
     onDeleteRun: (RunModel) -> Unit,
     onClickRunDetails: (String) -> Unit,
-    onRefreshList: () -> Unit
+//    onRefreshList: () -> Unit
 ) {
     LazyColumn {
         items(
@@ -32,7 +32,7 @@ internal fun RunCardList(
                 dateRan = DateFormat.getDateTimeInstance().format(run.dateRan),
                 onClickDelete = { onDeleteRun(run) },
                 onClickRunDetails = { onClickRunDetails(run._id) },
-                onRefreshList = onRefreshList
+                onRefreshList = { }
             )
         }
     }
@@ -48,7 +48,7 @@ fun RunCardListPreview() {
             fakeRuns.toMutableStateList(),
             onDeleteRun = {},
             onClickRunDetails = { },
-            onRefreshList = { },
+//            onRefreshList = { },
         )
     }
 }

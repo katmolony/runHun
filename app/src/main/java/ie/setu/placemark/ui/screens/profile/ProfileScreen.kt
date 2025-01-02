@@ -1,16 +1,20 @@
 package ie.setu.placemark.ui.screens.profile
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ie.setu.placemark.R
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.ui.components.general.HeadingTextComponent
+import ie.setu.placemark.ui.components.general.ShowPhotoPicker
 import ie.setu.placemark.ui.components.profile.UserProfile
 import ie.setu.placemark.ui.screens.login.LoginViewModel
 import ie.setu.placemark.ui.screens.register.RegisterViewModel
@@ -33,15 +38,16 @@ fun ProfileScreen(
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
     val userProfile = profileViewModel.userProfile.value
+//    val photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
+    var photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
+
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        HeadingTextComponent(value = stringResource(id = R.string.account_settings))
+    HeadingTextComponent(value = stringResource(id = R.string.account_settings))
         Spacer(modifier = Modifier.height(10.dp))
 
         // Show user details or loading state
@@ -52,10 +58,24 @@ fun ProfileScreen(
             // Handle error state (e.g., display error message)
             Text("Error fetching profile. Please try again.")
         } else {
-            // Profile fetched successfully
-            BasicContent(
-                displayName = profileViewModel.displayName,
-                email = profileViewModel.email
+
+            if(photoUri.toString().isNotEmpty())
+                ProfileContent(
+                    photoUri = photoUri,
+                    displayName = profileViewModel.displayName,
+                    email = profileViewModel.email
+                )
+            else
+                BasicContent(
+                    displayName = profileViewModel.displayName,
+                    email = profileViewModel.email
+                )
+
+            ShowPhotoPicker(
+                onPhotoUriChanged = {
+                    photoUri = it
+                    profileViewModel.updatePhotoUri(photoUri!!)
+                }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -83,8 +103,7 @@ fun ProfileScreen(
                     registerViewModel.resetRegisterFlow()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    containerColor = MaterialTheme.colorScheme.tertiary
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
             ) {
                 Text(text = "Logout")

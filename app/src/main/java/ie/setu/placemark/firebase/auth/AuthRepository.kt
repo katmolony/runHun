@@ -1,16 +1,27 @@
 package ie.setu.placemark.firebase.auth
 
+import android.content.Context
+import android.net.Uri
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import ie.setu.placemark.data.model.UserProfileModel
+import ie.setu.placemark.firebase.database.FirestoreRepository
 import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirebaseSignInResponse
+import ie.setu.placemark.firebase.services.FirestoreService
+import ie.setu.placemark.firebase.services.SignInWithGoogleResponse
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class AuthRepository
-@Inject constructor(private val firebaseAuth: FirebaseAuth)
+@Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+//    private val context: Context
+)
     : AuthService {
 
     override val currentUserId: String
@@ -25,9 +36,15 @@ class AuthRepository
     override val email: String?
         get() = firebaseAuth.currentUser?.email
 
+    override val customPhotoUri: Uri?
+        get() = firebaseAuth.currentUser!!.photoUrl
+
     override suspend fun authenticateUser(email: String, password: String): FirebaseSignInResponse {
         return try {
                 val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+//                val userId = result.user?.uid
+//                // Store the userId in a session or state
+//                storeUserId(userId)
                 Response.Success(result.user!!)
         } catch (e: Exception) {
                 e.printStackTrace()
@@ -37,8 +54,16 @@ class AuthRepository
 
     override suspend fun createUser(name: String, email: String, password: String): FirebaseSignInResponse {
         return try {
+            val uri = Uri.parse("android.resource://ie.setu.placemark/drawable/run_logo")
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            result.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(name).build())?.await()
+            result.user?.updateProfile(UserProfileChangeRequest
+                .Builder()
+                .setDisplayName(name)
+                .setPhotoUri(uri)
+                .build())?.await()
+//            val userId = result.user?.uid
+            // Store the userId in a session or state
+//            storeUserId(userId)
             return Response.Success(result.user!!)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -53,7 +78,6 @@ class AuthRepository
     // Implement createUserProfile
     override suspend fun createUserProfile(userProfile: UserProfileModel): Response<FirebaseUser> {
         return try {
-            // Assuming you are saving userProfile to Firestore or Firebase Realtime Database
             val user = firebaseAuth.currentUser
             user?.let {
                 // Perform the profile creation logic (e.g., saving to database)
@@ -65,5 +89,47 @@ class AuthRepository
             Response.Failure(e)
         }
     }
+    override suspend fun authenticateGoogleUser(googleIdToken: String) : FirebaseSignInResponse {
+        return try {
+            val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
+            val result = firebaseAuth.signInWithCredential(firebaseCredential).await()
+            Response.Success(result.user!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
 
+    override suspend fun firebaseSignInWithGoogle(
+        googleCredential: AuthCredential
+    ): FirebaseSignInResponse {
+        return try {
+            val authResult = firebaseAuth.signInWithCredential(googleCredential).await()
+            val user = authResult.user
+            if (user != null) {
+                val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
+                if (isNewUser) {
+//                    addUserToFirestore()
+                }
+                Response.Success(user)
+            } else {
+                Response.Failure(Exception("User is null"))
+            }
+        } catch (e: Exception) {
+            Response.Failure(e)
+        }
+    }
+
+    override suspend fun updatePhoto(uri: Uri) : FirebaseSignInResponse {
+        return try {
+            currentUser!!.updateProfile(UserProfileChangeRequest
+                .Builder()
+                .setPhotoUri(uri)
+                .build()).await()
+            return Response.Success(currentUser!!)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Response.Failure(e)
+        }
+    }
 }

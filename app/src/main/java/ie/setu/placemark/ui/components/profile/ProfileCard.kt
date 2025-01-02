@@ -82,9 +82,9 @@ private fun ProfileCardContent(
             }
 
             // Display the profile details with titles
-            ProfileField("Total Distance Run", "${profile.totalDistanceRun} ${profile.preferredUnit}")
+            ProfileField("Total Distance Run", "${String.format("%.2f", profile.totalDistanceRun)} ${profile.preferredUnit}")
             ProfileField("Total Runs", profile.totalRuns.toString())
-            ProfileField("Average Pace", "${profile.averagePace} ${profile.preferredUnit}/min")
+            ProfileField("Average Pace", "${String.format("%.2f", profile.averagePace)} ${profile.preferredUnit}/min")
             ProfileField("Preferred Unit", profile.preferredUnit)
 
             if (expanded) {

@@ -8,13 +8,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
 import ie.setu.placemark.firebase.services.AuthService
+import ie.setu.placemark.firebase.services.FirestoreService
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject
-constructor(private val repository: RetrofitRepository,
+constructor(private val repository: FirestoreService,
             savedStateHandle: SavedStateHandle,
             private val authService: AuthService
 ) : ViewModel() {
@@ -32,8 +33,8 @@ constructor(private val repository: RetrofitRepository,
             try {
                 isLoading.value = true
                 Timber.i("DetailsViewModel. Fetching run with id: $id") // Log the ID
-                run.value = repository.get(authService.email!!,id)[0]
-                val fetchedRun = repository.get(authService.email!!,id)
+                run.value = repository.get(authService.email!!,id)!!
+                val fetchedRun = repository.get(authService.email!!,id)!!
                 Timber.i("DetailsViewModel. Run fetched: $fetchedRun") // Log the response
                 isErr.value = false
                 isLoading.value = false
