@@ -17,8 +17,17 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlinx.coroutines.flow.update
 
-enum class SortOption {
-    DATE, DISTANCE
+enum class SortOption(val isAscending: Boolean) {
+    DATE_ASC(true),
+    DATE_DESC(false),
+    DISTANCE_ASC(true),
+    DISTANCE_DESC(false);
+
+    val field: String
+        get() = when (this) {
+            DATE_ASC, DATE_DESC -> "Date"
+            DISTANCE_ASC, DISTANCE_DESC -> "Distance"
+        }
 }
 
 @HiltViewModel
@@ -38,7 +47,7 @@ constructor(
     // Use mutableStateOf for userProfile
     var userProfile = mutableStateOf<UserProfileModel?>(null)
 
-    var sortOption = mutableStateOf(SortOption.DATE)
+    var sortOption = mutableStateOf(SortOption.DATE_DESC)
 
 
     init {
@@ -78,11 +87,12 @@ constructor(
 
     private fun sortRuns(runs: List<RunModel>, option: SortOption): List<RunModel> {
         return when (option) {
-            SortOption.DATE -> runs.sortedByDescending { it.dateRan }
-            SortOption.DISTANCE -> runs.sortedByDescending { it.distanceAmount }
+            SortOption.DATE_ASC -> runs.sortedBy { it.dateRan }
+            SortOption.DATE_DESC -> runs.sortedByDescending { it.dateRan }
+            SortOption.DISTANCE_ASC -> runs.sortedBy { it.distanceAmount }
+            SortOption.DISTANCE_DESC -> runs.sortedByDescending { it.distanceAmount }
         }
     }
-
 
     fun getUserProfiles() {
         viewModelScope.launch {
