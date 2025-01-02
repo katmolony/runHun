@@ -32,14 +32,22 @@ import ie.setu.placemark.ui.components.profile.UserProfile
 import ie.setu.placemark.ui.components.report.RunCardList
 import ie.setu.placemark.ui.components.report.ReportText
 import ie.setu.placemark.ui.theme.RunHunTheme
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import ie.setu.placemark.ui.components.report.SortDropdown
 
 @Composable
 fun ReportScreen(
     modifier: Modifier = Modifier,
     onClickRunDetails: (String) -> Unit,
-    reportViewModel: ReportViewModel = hiltViewModel()) {
-
+    reportViewModel: ReportViewModel = hiltViewModel()
+) {
     val runs = reportViewModel.uiRuns.collectAsState().value
+    val sortOption = reportViewModel.sortOption.value
 
     val userProfile = reportViewModel.userProfile.value
 
@@ -47,39 +55,44 @@ fun ReportScreen(
     val isLoading = reportViewModel.isloading.value
     val error = reportViewModel.error.value
 
-//    LaunchedEffect(Unit) {
-//        reportViewModel.getRuns()
-//    }
+    Column(modifier = modifier.padding(24.dp)) {
+        Spacer(modifier = Modifier.height(10.dp))
 
-    Column {
-        Column(
-            modifier = modifier.padding(
-                start = 24.dp,
-                end = 24.dp
-            ),
-        ) {
+        // Profile Card
+        if (userProfile != null) {
+            ProfileCard(
+                profile = UserProfile(
+                    totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
+                    totalRuns = userProfile.totalRuns ?: 0,
+                    averagePace = userProfile.averagePace ?: 0.0,
+                    preferredUnit = userProfile.preferredUnit ?: "km"
+                ),
+                onClickEdit = {}
+            )
+        }
 
-            Spacer(modifier = Modifier.height(10.dp))
-            // Display profile card with user data if userProfile is not null
-            if (userProfile != null) {
-                ProfileCard(
-                    profile = UserProfile(
-                        totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
-                        totalRuns = userProfile.totalRuns ?: 0,
-                        averagePace = userProfile.averagePace ?: 0.0,
-                        preferredUnit = userProfile.preferredUnit ?: "km"
-                    ),
-                    onClickEdit = {}
-                )
-            }
+        Spacer(modifier = Modifier.height(10.dp))
 
-//            Spacer(modifier = Modifier.height(10.dp))
-            if(isLoading) ShowLoader("Loading Runs...")
-            ReportText()
-//            if(!isError)
-//                ShowRefreshList(onClick = { reportViewModel.getRuns() })
-            if (runs.isEmpty() && !isError)
-            Centre(Modifier.fillMaxSize()) {
+        // Sorting Dropdown
+        SortDropdown(
+            currentOption = sortOption,
+            onSortOptionSelected = { reportViewModel.setSortOption(it) }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Runs or Error State
+        if (isLoading) {
+            ShowLoader("Loading Runs...")
+        } else if (isError) {
+            ShowError(
+                headline = error.message!! + " error...",
+                subtitle = error.toString(),
+                onClick = { reportViewModel.getRuns() }
+            )
+        } else {
+            if (runs.isEmpty()) {
+                Centre(Modifier.fillMaxSize()) {
                     Text(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
@@ -89,25 +102,17 @@ fun ReportScreen(
                         text = stringResource(R.string.empty_list)
                     )
                 }
-            if (!isError) {
+            } else {
                 RunCardList(
                     runs = runs,
                     onClickRunDetails = onClickRunDetails,
-                    onDeleteRun = { run: RunModel ->
-                        reportViewModel.deleteRun(run)
-                    },
-//                    onRefreshList = { reportViewModel.getRuns() }
+                    onDeleteRun = { run -> reportViewModel.deleteRun(run) }
                 )
             }
-            if (isError) {
-                ShowError(headline = error.message!! + " error...",
-                    subtitle = error.toString(),
-                    onClick = { reportViewModel.getRuns() })
-            }
-
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -143,6 +148,7 @@ fun PreviewReportScreen(modifier: Modifier = Modifier,
                     )
                 }
             else
+                ReportText()
                 RunCardList(
                     runs = runs,
                     onDeleteRun = {},

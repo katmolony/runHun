@@ -15,6 +15,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlinx.coroutines.flow.update
+
+enum class SortOption {
+    DATE, DISTANCE
+}
 
 @HiltViewModel
 class ReportViewModel @Inject
@@ -32,6 +37,8 @@ constructor(
 
     // Use mutableStateOf for userProfile
     var userProfile = mutableStateOf<UserProfileModel?>(null)
+
+    var sortOption = mutableStateOf(SortOption.DATE)
 
 
     init {
@@ -64,6 +71,17 @@ constructor(
             repository.delete(authService.email!!,run._id)
         }
 
+    fun setSortOption(option: SortOption) {
+        sortOption.value = option
+        _runs.update { sortRuns(it, option) }
+    }
+
+    private fun sortRuns(runs: List<RunModel>, option: SortOption): List<RunModel> {
+        return when (option) {
+            SortOption.DATE -> runs.sortedByDescending { it.dateRan }
+            SortOption.DISTANCE -> runs.sortedByDescending { it.distanceAmount }
+        }
+    }
 
 
     fun getUserProfiles() {
