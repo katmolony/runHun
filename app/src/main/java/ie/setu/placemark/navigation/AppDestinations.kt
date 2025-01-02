@@ -57,7 +57,7 @@ object Details : AppDestination {
 object Home : AppDestination {
     override val icon = Icons.Filled.Home
     override val label = "Home"
-    override val route = "Home"
+    override val route = "home"
 }
 
 object Profile : AppDestination {

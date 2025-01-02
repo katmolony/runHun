@@ -17,6 +17,7 @@ import ie.setu.placemark.ui.screens.details.DetailsScreen
 import ie.setu.placemark.ui.screens.options.OptionsScreen
 import ie.setu.placemark.ui.screens.report.ReportScreen
 import ie.setu.placemark.ui.screens.run.RunScreen
+import ie.setu.placemark.ui.theme.ThemeViewModel
 
 @Composable
 fun NavHostProvider(
@@ -24,35 +25,30 @@ fun NavHostProvider(
     navController: NavHostController,
     startDestination: AppDestination,
     paddingValues: PaddingValues,
-//    runs: SnapshotStateList<RunModel>
+    themeViewModel: ThemeViewModel
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination.route,
-        modifier = Modifier.padding(paddingValues = paddingValues)) {
-
+        modifier = Modifier.padding(paddingValues = paddingValues)
+    ) {
         composable(route = Run.route) {
-            //call our 'Run' Screen Here
             RunScreen(modifier = modifier)
         }
 
         composable(route = Home.route) {
-            //call our 'Home' Screen Here
-            HomeScreen(modifier = modifier)
+            HomeScreen(modifier = modifier, themeViewModel = themeViewModel)
         }
 
         composable(route = Report.route) {
-            //call our 'Report' Screen Here
             ReportScreen(
                 modifier = modifier,
-                    onClickRunDetails = {
-                        runId : String ->
-                        navController.navigateToRunDetails(runId)
-                    },
-                )
+                onClickRunDetails = { runId: String ->
+                    navController.navigateToRunDetails(runId)
+                }
+            )
         }
 
-        //ui screenn for options
         composable(route = Options.route) {
             OptionsScreen(
                 modifier = modifier,
@@ -60,14 +56,11 @@ fun NavHostProvider(
             )
         }
 
-        //ui screenn for about
         composable(route = About.route) {
-            //call our 'Option' Screen Here
             AboutScreen(modifier = modifier)
         }
 
         composable(route = Login.route) {
-            //call our 'Login' Screen Here
             LoginScreen(
                 navController = navController,
                 onLogin = { navController.popBackStack() }
@@ -75,7 +68,6 @@ fun NavHostProvider(
         }
 
         composable(route = Register.route) {
-            //call our 'Register' Screen Here
             RegisterScreen(
                 navController = navController,
                 onRegister = { navController.popBackStack() }
@@ -85,8 +77,7 @@ fun NavHostProvider(
         composable(
             route = Details.route,
             arguments = Details.arguments
-        )
-        { navBackStackEntry ->
+        ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getString(Details.idArg)
             if (id != null) {
                 DetailsScreen()
@@ -101,21 +92,21 @@ fun NavHostProvider(
                         popUpTo(Home.route) { inclusive = true }
                     }
                 },
+                themeViewModel = themeViewModel
             )
         }
 
         composable(route = Achievements.route) {
-            //call our 'Achievements' Screen Here
             AchievementsScreen(
                 modifier = modifier,
                 onClickRunDetails = { runId: String ->
                     navController.navigateToRunDetails(runId)
-                },
+                }
             )
         }
     }
 }
+
 private fun NavHostController.navigateToRunDetails(runId: String) {
     this.navigate("details/$runId")
 }
-

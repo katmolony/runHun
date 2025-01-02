@@ -1,9 +1,14 @@
 package ie.setu.placemark.ui.screens.home
 
 import android.annotation.SuppressLint
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,12 +26,14 @@ import ie.setu.placemark.navigation.userSignedOutDestinations
 import ie.setu.placemark.ui.components.general.BottomAppBarProvider
 import ie.setu.placemark.ui.components.general.TopAppBarProvider
 import ie.setu.placemark.ui.theme.RunHunTheme
+import ie.setu.placemark.ui.theme.ThemeViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier,
                homeViewModel: HomeViewModel = hiltViewModel(),
                navController: NavHostController = rememberNavController(),
+               themeViewModel: ThemeViewModel
 ) {
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentNavBackStackEntry?.destination
@@ -45,43 +52,50 @@ fun HomeScreen(modifier: Modifier = Modifier,
 //    val userName = currentUser?.displayName ?: ""
 
     val userDestinations = if (!isActiveSession)
-                                    userSignedOutDestinations
-                                else bottomAppBarDestinations
+        userSignedOutDestinations
+    else bottomAppBarDestinations
 
-      if (isActiveSession) startScreen = Report
+    if (isActiveSession) startScreen = Report
 
-    Scaffold(
-        modifier = modifier,
-        topBar = { TopAppBarProvider(
-            navController = navController,
-            currentScreen = currentBottomScreen,
-            canNavigateBack = navController.previousBackStackEntry != null,
-            email = userEmail!!,
-            name = userName!!
-        ) { navController.navigateUp() }
-        },
-        content = { paddingValues ->
-            NavHostProvider(
-                modifier = modifier,
-                navController = navController,
-                startDestination = startScreen,
-                paddingValues = paddingValues
-            )
-        },
-        bottomBar = {
-            BottomAppBarProvider(
-                navController,
-                currentScreen = currentBottomScreen,
-                userDestinations
-            )
-        }
-    )
-}
+    val isDarkTheme = themeViewModel.isDarkTheme.collectAsState().value
 
-@Preview(showBackground = true)
-@Composable
-fun MyAppPreview() {
-    RunHunTheme {
-        HomeScreen(modifier = Modifier)
+    RunHunTheme(darkTheme = isDarkTheme) {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                TopAppBarProvider(
+                    navController = navController,
+                    currentScreen = currentBottomScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    email = userEmail!!,
+                    name = userName!!
+                ) { navController.navigateUp() }
+            },
+            content = { paddingValues ->
+                NavHostProvider(
+                    modifier = modifier,
+                    navController = navController,
+                    startDestination = startScreen,
+                    paddingValues = paddingValues,
+                    themeViewModel = themeViewModel
+                )
+            },
+            bottomBar = {
+                BottomAppBarProvider(
+                    navController,
+                    currentScreen = currentBottomScreen,
+                    userDestinations
+                )
+            }
+        )
     }
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun MyAppPreview() {
+//    RunHunTheme {
+//        HomeScreen(modifier = Modifier),
+//        themeViewModel= ThemeViewModel
+//    }
+//}
