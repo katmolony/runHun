@@ -13,3 +13,16 @@ val Fuchsia40 = Color(0xFFFF00FF)
 val PrimaryBlue = Color(0xFFFF69B4)
 val SecondaryBlue = Color(0xFFDB7093)
 val TertiaryBlue = Color(0xFFFF00FF)
+
+val LightPrimary = Color(0xFFFF69B4)
+val LightSecondary = Color(0xFFDB7093)
+val LightTertiary = Color(0xFFFF00FF)
+val LightBackground = Color(0xFFFFFBFE)
+val LightSurface = Color(0xFFFFFBFE)
+val LightOnPrimary = Color.White
+val LightOnSecondary = Color.White
+val LightOnTertiary = Color.White
+val LightOnBackground = Color(0xFF1C1B1F)
+val LightOnSurface = Color(0xFF1C1B1F)
+val LightError = Color(0xFFB00020)
+val LightOnError = Color.White
