@@ -43,8 +43,8 @@ fun PreferredUnitSelection(
 ) {
     Row {
         RadioButton(
-            selected = currentUnit == "km",
-            onClick = { onUnitSelected("km") }
+            selected = currentUnit == "kilometres",
+            onClick = { onUnitSelected("kilometres") }
         )
         Text(text = "Kilometers", modifier = Modifier.clickable { onUnitSelected("km") })
         Spacer(modifier = Modifier.width(16.dp))
