@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,7 +39,9 @@ fun RunScreen(modifier: Modifier = Modifier,
               runViewModel: RunViewModel = hiltViewModel()
 )
 {
-
+    LaunchedEffect(Unit) {
+        runViewModel.refreshUnitType()
+    }
 
     val unitType by runViewModel.unitType.collectAsState()
     var distanceAmount by remember { mutableIntStateOf(10) }
