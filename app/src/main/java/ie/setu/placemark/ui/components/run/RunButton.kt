@@ -30,6 +30,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.toMutableStateList
 import ie.setu.placemark.data.model.fakeRuns
@@ -37,6 +38,7 @@ import timber.log.Timber
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import ie.setu.placemark.ui.components.general.ShowLoader
+import ie.setu.placemark.ui.screens.map.MapViewModel
 import ie.setu.placemark.ui.screens.report.ReportViewModel
 import ie.setu.placemark.ui.screens.run.RunViewModel
 
@@ -46,8 +48,9 @@ fun RunButton(
     run: RunModel,
     runViewModel: RunViewModel = hiltViewModel(),
     reportViewModel: ReportViewModel = hiltViewModel(),
-//    onTotalDistanceChange: (Int) -> Unit
-)
+    mapViewModel: MapViewModel = hiltViewModel(),
+
+    )
 {
     var totalDistance by remember { mutableIntStateOf(0) }
     val context = LocalContext.current
@@ -61,6 +64,14 @@ fun RunButton(
 
 //    if(isLoading) ShowLoader("Trying to Add a Run...")
 
+    val locationLatLng = mapViewModel.currentLatLng.collectAsState().value
+    LaunchedEffect(mapViewModel.currentLatLng){
+        mapViewModel.getLocationUpdates()
+    }
+
+    Timber.i("RUN BUTTON LAT/LNG COORDINATES " +
+            "lat/Lng: " + "$locationLatLng ")
+
 
     Row {
         Button(
@@ -68,7 +79,11 @@ fun RunButton(
             if(totalDistance + run.distanceAmount <= 400) {
                 totalDistance+=run.distanceAmount
 //                onTotalDistanceChange(totalDistance)
-                runViewModel.insert(run)
+                val runLatLng = run.copy(
+                    latitude = locationLatLng.latitude,
+                    longitude = locationLatLng.longitude
+                )
+                runViewModel.insert(runLatLng)
                 Timber.i("Run info : $run")
                 Timber.i("Run List info : ${runs.toList()}")
             }

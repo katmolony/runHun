@@ -24,12 +24,17 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import ie.setu.placemark.ui.theme.RunHunTheme
+import ie.setu.placemark.ui.screens.report.ReportViewModel
 import timber.log.Timber
 
 @Composable
-fun MapScreen() {
+fun MapScreen(
+    mapViewModel: MapViewModel = hiltViewModel(),
+    reportViewModel: ReportViewModel = hiltViewModel(),
+
+    ) {
     val uiSettings by remember { mutableStateOf(MapUiSettings(
-        //myLocationButtonEnabled = true,
+        myLocationButtonEnabled = true,
         compassEnabled = true,
         mapToolbarEnabled = true
     )) }
@@ -37,20 +42,24 @@ fun MapScreen() {
     val properties by remember {
         mutableStateOf(MapProperties(
             mapType = MapType.NORMAL,
-            //isMyLocationEnabled = true
+            isMyLocationEnabled = true
         ))
     }
 
-    val currentLocation = LatLng(52.245696, -7.139102)
+    val runs = reportViewModel.uiRuns.collectAsState().value
+
+    val currentLocation = mapViewModel.currentLatLng.collectAsState().value
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(currentLocation, 14f)
     }
-
     LaunchedEffect(currentLocation){
+        mapViewModel.getLocationUpdates()
         cameraPositionState.animate(CameraUpdateFactory.newLatLng(currentLocation))
         cameraPositionState.position = CameraPosition.fromLatLngZoom(currentLocation, 14f)
     }
+
+    Timber.i("MAP LAT/LNG COORDINATES $currentLocation ")
 
     Column{
         GoogleMap(
@@ -61,12 +70,20 @@ fun MapScreen() {
         ) {
             Marker(
                 state = MarkerState(position = currentLocation),
-                title = "SETU",
-                snippet = "This is SETU"
+                title = "Current Location",
+                snippet = "This is My Current Location"
             )
-
+            runs.forEach {
+                val position = LatLng(it.latitude,it.longitude)
+                Marker(
+                    state = MarkerState(position = position),
+                    title = "${it.distanceAmount} ${it.unitType}",
+                    snippet = it.message
+                )
+            }
         }
-    }}
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
