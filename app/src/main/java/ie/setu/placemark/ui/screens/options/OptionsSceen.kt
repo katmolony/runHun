@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import ie.setu.placemark.R
+import ie.setu.placemark.navigation.Achievements
 import ie.setu.placemark.ui.components.general.Centre
 import ie.setu.placemark.ui.theme.RunHunTheme
 
@@ -54,7 +55,7 @@ fun OptionsScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {
-                    navController.navigate(ie.setu.placemark.navigation.Achievements.route)
+                    navController.navigate(Achievements.route)
                 }) {
                     Icon(painter = painterResource(id = R.drawable.ic_achievements), contentDescription = "Achievements Icon")
                     Spacer(modifier = Modifier.width(8.dp))

@@ -84,6 +84,12 @@ object Achievements : AppDestination {
     override val route = "Achievements"
 }
 
+object Settings : AppDestination {
+    override val icon = Icons.Default.AccountCircle
+    override val label = "Settings"
+    override val route = "Settings"
+}
+
 val bottomAppBarDestinations = listOf(Run, Report, Options, Profile)
 val userSignedOutDestinations = listOf(Login, Register)
 val allDestinations = listOf(
@@ -96,5 +102,6 @@ val allDestinations = listOf(
     Login,
     Register,
     About,
-    Achievements
+    Achievements,
+    Settings
 )

@@ -17,6 +17,8 @@ import ie.setu.placemark.ui.screens.details.DetailsScreen
 import ie.setu.placemark.ui.screens.options.OptionsScreen
 import ie.setu.placemark.ui.screens.report.ReportScreen
 import ie.setu.placemark.ui.screens.run.RunScreen
+import ie.setu.placemark.ui.screens.settings.SettingsScreen
+import ie.setu.placemark.ui.screens.settings.SettingsViewModel
 import ie.setu.placemark.ui.theme.ThemeViewModel
 
 @Composable
@@ -53,6 +55,13 @@ fun NavHostProvider(
             OptionsScreen(
                 modifier = modifier,
                 navController = navController
+            )
+        }
+
+        composable(route = Settings.route) {
+            SettingsScreen(
+                modifier = modifier,
+                settingsViewModel = SettingsViewModel(themeViewModel)
             )
         }
 
