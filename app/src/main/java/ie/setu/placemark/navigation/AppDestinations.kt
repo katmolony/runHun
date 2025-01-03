@@ -90,6 +90,12 @@ object Settings : AppDestination {
     override val route = "Settings"
 }
 
+object Contact : AppDestination {
+    override val icon = Icons.Default.AccountCircle
+    override val label = "Contact"
+    override val route = "Contact"
+}
+
 val bottomAppBarDestinations = listOf(Run, Report, Options, Profile)
 val userSignedOutDestinations = listOf(Login, Register)
 val allDestinations = listOf(
@@ -103,5 +109,6 @@ val allDestinations = listOf(
     Register,
     About,
     Achievements,
-    Settings
+    Settings,
+    Contact
 )

@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ie.setu.placemark.ui.screens.about.AboutScreen
 import ie.setu.placemark.ui.screens.achievements.AchievementsScreen
+import ie.setu.placemark.ui.screens.contact.ContactScreen
 import ie.setu.placemark.ui.screens.home.HomeScreen
 import ie.setu.placemark.ui.screens.login.LoginScreen
 import ie.setu.placemark.ui.screens.profile.ProfileScreen
@@ -67,6 +68,10 @@ fun NavHostProvider(
 
         composable(route = Settings.route) {
             SettingsScreen(modifier = modifier)
+        }
+
+        composable(route = Contact.route) {
+            ContactScreen(modifier = modifier)
         }
 
         composable(route = About.route) {
