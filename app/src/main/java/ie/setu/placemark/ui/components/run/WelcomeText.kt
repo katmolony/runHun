@@ -37,7 +37,7 @@ fun WelcomeText(modifier: Modifier = Modifier) {
                 text = stringResource(R.string.runTitle),
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
-                color = Color.DarkGray,
+                color = Color.Black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )

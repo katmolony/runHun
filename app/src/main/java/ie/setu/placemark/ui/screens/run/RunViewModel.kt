@@ -28,6 +28,10 @@ constructor(
     val unitType: StateFlow<String> = _unitType
 
     init {
+        refreshUnitType()
+    }
+
+    init {
         viewModelScope.launch {
             val userProfile = repository.getUserProfile(authService.email!!)
             _unitType.value = userProfile?.preferredUnit ?: "kilometres"
@@ -48,5 +52,16 @@ constructor(
                 isLoading.value = false
             }
         }
+
+    fun updateUnitType(newUnitType: String) {
+        _unitType.value = newUnitType
+    }
+
+    fun refreshUnitType() {
+        viewModelScope.launch {
+            val userProfile = repository.getUserProfile(authService.email!!)
+            _unitType.value = userProfile?.preferredUnit ?: "kilometres"
+        }
+    }
 }
 
