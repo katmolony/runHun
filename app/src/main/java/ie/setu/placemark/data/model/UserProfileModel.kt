@@ -22,7 +22,7 @@ data class UserProfileModel(
     @SerializedName("averagePace")
     val averagePace: Double = 0.0,
     @SerializedName("preferredUnit")
-    val preferredUnit: String = "km" // Default unit
+    var preferredUnit: String = "km" // Default unit
 ) {
     // No-argument constructor for Firestore
     constructor() : this(0, "N/A", "", "", null, 0.0, 0, 0.0, "km")

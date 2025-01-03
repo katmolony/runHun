@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -57,7 +58,7 @@ object Details : AppDestination {
 object Home : AppDestination {
     override val icon = Icons.Filled.Home
     override val label = "Home"
-    override val route = "Home"
+    override val route = "home"
 }
 
 object Profile : AppDestination {
@@ -84,7 +85,26 @@ object Achievements : AppDestination {
     override val route = "Achievements"
 }
 
-val bottomAppBarDestinations = listOf(Run, Report, Options, Profile)
+object Settings : AppDestination {
+    override val icon = Icons.Default.AccountCircle
+    override val label = "Settings"
+    override val route = "Settings"
+}
+
+object Contact : AppDestination {
+    override val icon = Icons.Default.AccountCircle
+    override val label = "Contact"
+    override val route = "Contact"
+}
+
+object Map : AppDestination {
+    override val icon = Icons.Filled.LocationOn
+    override val label = "Map"
+    override val route = "map"
+}
+
+
+val bottomAppBarDestinations = listOf(Run, Report, Options, Profile, Map)
 val userSignedOutDestinations = listOf(Login, Register)
 val allDestinations = listOf(
     Report,
@@ -96,5 +116,8 @@ val allDestinations = listOf(
     Login,
     Register,
     About,
-    Achievements
+    Achievements,
+    Settings,
+    Contact,
+    Map
 )

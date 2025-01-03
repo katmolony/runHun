@@ -19,7 +19,11 @@ data class RunModel(
     var message: String = "Go Hun!",
     @SerializedName("dateRan")
     val dateRan: Date = Date(),
-    var email: String = "homer@gmail.com"
+    var email: String = "homer@gmail.com",
+    var imageUri: String = "",
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
+
 ) {
     // No-argument constructor for Firestore
     constructor() : this(0, "", "", 0, "", Date(), "")

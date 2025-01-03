@@ -11,6 +11,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +23,8 @@ import ie.setu.placemark.firebase.auth.AuthRepository
 import ie.setu.placemark.firebase.database.FirestoreRepository
 import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirestoreService
+import ie.setu.placemark.firebase.services.StorageService
+import ie.setu.placemark.firebase.storage.StorageRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -52,9 +56,12 @@ object FirebaseModule {
 
     @Provides
     fun provideAuthRepository(
-        auth: FirebaseAuth
+        auth: FirebaseAuth,
+        storage: StorageService
     ): AuthService = AuthRepository(
-        firebaseAuth = auth)
+        firebaseAuth = auth,
+        storageService = storage)
+
 
     @Provides
     fun provideCredentialManager(
@@ -76,4 +83,14 @@ object FirebaseModule {
     ) = GetCredentialRequest.Builder()
         .addCredentialOption(googleIdOption)
         .build()
+
+    @Provides
+    fun provideFirebaseStorage() : FirebaseStorage = Firebase.storage
+
+    @Provides
+    fun provideStorageRepository(
+        firebaseStorage: FirebaseStorage
+    ) : StorageService = StorageRepository(
+        storage = firebaseStorage)
+
 }

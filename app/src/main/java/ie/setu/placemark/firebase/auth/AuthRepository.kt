@@ -13,6 +13,7 @@ import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirebaseSignInResponse
 import ie.setu.placemark.firebase.services.FirestoreService
 import ie.setu.placemark.firebase.services.SignInWithGoogleResponse
+import ie.setu.placemark.firebase.services.StorageService
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class AuthRepository
 @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-//    private val context: Context
+    private val storageService: StorageService
 )
     : AuthService {
 
@@ -59,7 +60,7 @@ class AuthRepository
             result.user?.updateProfile(UserProfileChangeRequest
                 .Builder()
                 .setDisplayName(name)
-                .setPhotoUri(uri)
+                .setPhotoUri(uploadCustomPhotoUri(uri))
                 .build())?.await()
 //            val userId = result.user?.uid
             // Store the userId in a session or state
@@ -124,7 +125,7 @@ class AuthRepository
         return try {
             currentUser!!.updateProfile(UserProfileChangeRequest
                 .Builder()
-                .setPhotoUri(uri)
+                .setPhotoUri(uploadCustomPhotoUri(uri))
                 .build()).await()
             return Response.Success(currentUser!!)
         } catch (e: Exception) {
@@ -132,4 +133,18 @@ class AuthRepository
             Response.Failure(e)
         }
     }
+
+    private suspend fun uploadCustomPhotoUri(uri: Uri) : Uri {
+        if (uri.toString().isNotEmpty()) {
+            val urlTask = storageService.uploadFile(uri = uri, "images")
+            val url = urlTask.addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Timber.e("task not successful: ${task.exception}")
+                }
+            }.await()
+            return url
+        }
+        return Uri.EMPTY
+    }
+
 }

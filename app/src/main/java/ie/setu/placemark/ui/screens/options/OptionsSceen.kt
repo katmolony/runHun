@@ -1,27 +1,25 @@
 package ie.setu.placemark.ui.screens.options
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import ie.setu.placemark.R
+import ie.setu.placemark.navigation.Achievements
 import ie.setu.placemark.ui.components.general.Centre
-import ie.setu.placemark.ui.theme.RunHunTheme
+import ie.setu.placemark.ui.components.options.OptionCard
 
 @Composable
 fun OptionsScreen(
@@ -37,7 +35,7 @@ fun OptionsScreen(
                 .padding(top = 48.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.run_logo),
+                painter = painterResource(id = R.drawable.runner),
                 contentDescription = "Run Logo",
                 modifier = Modifier.size(350.dp)
             )
@@ -53,40 +51,31 @@ fun OptionsScreen(
                     text = stringResource(R.string.options_message)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {
-                    navController.navigate(ie.setu.placemark.navigation.Achievements.route)
-                }) {
-                    Icon(painter = painterResource(id = R.drawable.ic_achievements), contentDescription = "Achievements Icon")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Achievements")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { navController.navigate("statistics") }) {
-                    Icon(painter = painterResource(id = R.drawable.ic_achievements), contentDescription = "Statistics Icon")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Statistics")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { navController.navigate("settings") }) {
-                    Icon(painter = painterResource(id = R.drawable.ic_achievements), contentDescription = "Settings Icon")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Settings")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { navController.navigate("contact") }) {
-                    Icon(painter = painterResource(id = R.drawable.ic_achievements), contentDescription = "Contact Icon")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Contact")
-                }
+                OptionCard(
+                    icon = painterResource(id = R.drawable.ic_achievements),
+                    contentDescription = "Achievements Icon",
+                    text = "Achievements",
+                    onClick = { navController.navigate(Achievements.route) }
+                )
+//                OptionCard(
+//                    icon = painterResource(id = R.drawable.ic_achievements),
+//                    contentDescription = "Statistics Icon",
+//                    text = "Statistics",
+//                    onClick = { navController.navigate("statistics") }
+//                )
+                OptionCard(
+                    icon = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = "Settings Icon",
+                    text = "Settings",
+                    onClick = { navController.navigate("settings") }
+                )
+                OptionCard(
+                    icon = painterResource(id = R.drawable.ic_contact),
+                    contentDescription = "Contact Icon",
+                    text = "Contact",
+                    onClick = { navController.navigate("contact") }
+                )
             }
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun OptionsScreenPreview() {
-//    RunHunTheme {
-//        OptionsScreen(modifier = Modifier)
-//    }
-//}

@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -114,5 +115,16 @@ dependencies {
     implementation(libs.coil.compose)
     implementation ("io.coil-kt:coil:2.4.0")
     implementation ("io.coil-kt:coil-svg:2.4.0")
+
+    //DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
+    //Location & Maps
+    implementation(libs.play.services.location)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+
+    //Accompanist (Permission)
+    implementation(libs.accompanist.permissions)
 
 }

@@ -11,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,84 +30,86 @@ import ie.setu.placemark.ui.components.profile.UserProfile
 import ie.setu.placemark.ui.screens.login.LoginViewModel
 import ie.setu.placemark.ui.screens.register.RegisterViewModel
 import ie.setu.placemark.ui.components.profile.ProfileCard
+import ie.setu.placemark.ui.theme.RunHunTheme
+import ie.setu.placemark.ui.theme.ThemeViewModel
 
 @Composable
 fun ProfileScreen(
     onSignOut: () -> Unit = {},
     profileViewModel: ProfileViewModel = hiltViewModel(),
     loginViewModel: LoginViewModel = hiltViewModel(),
-    registerViewModel: RegisterViewModel = hiltViewModel()
+    registerViewModel: RegisterViewModel = hiltViewModel(),
+    themeViewModel: ThemeViewModel
 ) {
     val userProfile = profileViewModel.userProfile.value
-//    val photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
     var photoUri: Uri? by remember { mutableStateOf(profileViewModel.photoUri) }
+    val isDarkTheme = themeViewModel.isDarkTheme.collectAsState().value
 
-
-    Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-    HeadingTextComponent(value = stringResource(id = R.string.account_settings))
-        Spacer(modifier = Modifier.height(10.dp))
-
-        // Show user details or loading state
-        if (profileViewModel.isLoading.value) {
-            // Show a loading spinner or text while fetching the profile
-            Text("Loading profile...")
-        } else if (profileViewModel.isErr.value) {
-            // Handle error state (e.g., display error message)
-            Text("Error fetching profile. Please try again.")
-        } else {
-
-            if(photoUri.toString().isNotEmpty())
-                ProfileContent(
-                    photoUri = photoUri,
-                    displayName = profileViewModel.displayName,
-                    email = profileViewModel.email
-                )
-            else
-                BasicContent(
-                    displayName = profileViewModel.displayName,
-                    email = profileViewModel.email
-                )
-
-            ShowPhotoPicker(
-                onPhotoUriChanged = {
-                    photoUri = it
-                    profileViewModel.updatePhotoUri(photoUri!!)
-                }
-            )
-
+    RunHunTheme(darkTheme = isDarkTheme) {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            HeadingTextComponent(value = stringResource(id = R.string.account_settings))
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Display profile card with user data if userProfile is not null
-            if (userProfile != null) {
-                ProfileCard(
-                    profile = UserProfile(
-                        totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
-                        totalRuns = userProfile.totalRuns ?: 0,
-                        averagePace = userProfile.averagePace ?: 0.0,
-                        preferredUnit = userProfile.preferredUnit ?: "km"
-                    ),
-                    onClickEdit = { /* Handle edit action if needed */ }
+            if (profileViewModel.isLoading.value) {
+                Text("Loading profile...")
+            } else if (profileViewModel.isErr.value) {
+                Text("Error fetching profile. Please try again.")
+            } else {
+                if (photoUri.toString().isNotEmpty())
+                    ProfileContent(
+                        photoUri = photoUri,
+                        displayName = profileViewModel.displayName,
+                        email = profileViewModel.email
+                    )
+                else
+                    BasicContent(
+                        displayName = profileViewModel.displayName,
+                        email = profileViewModel.email
+                    )
+
+                ShowPhotoPicker(
+                    onPhotoUriChanged = {
+                        photoUri = it
+                        profileViewModel.updatePhotoUri(photoUri!!)
+                    }
                 )
-            }
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
-            Button(
-                onClick = {
-                    profileViewModel.signOut()
-                    onSignOut()
-                    loginViewModel.resetLoginFlow()
-                    registerViewModel.resetRegisterFlow()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-            ) {
-                Text(text = "Logout")
+                if (userProfile != null) {
+                    ProfileCard(
+                        profile = UserProfile(
+                            totalDistanceRun = userProfile.totalDistanceRun ?: 0.0,
+                            totalRuns = userProfile.totalRuns ?: 0,
+                            averagePace = userProfile.averagePace ?: 0.0,
+                            preferredUnit = userProfile.preferredUnit ?: "km"
+                        ),
+                        onClickEdit = { /* Handle edit action if needed */ }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = {
+                        profileViewModel.signOut()
+                        onSignOut()
+                        loginViewModel.resetLoginFlow()
+                        registerViewModel.resetRegisterFlow()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ),
+                ) {
+                    Text(text = "Logout")
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
             }
         }
     }

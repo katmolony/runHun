@@ -70,7 +70,14 @@ class LoginViewModel @Inject constructor(
             val email = user?.email ?: ""
             val name = user?.displayName ?: ""
             Timber.i("LoginViewModel, Google user email: $email, name: $name") // Log the email and name
-            createUserProfile(email, name)
+
+            // Check if the user profile already exists
+            val existingUserProfile = repository.getUserProfile(email)
+            if (existingUserProfile == null) {
+                createUserProfile(email, name)
+            } else {
+                Timber.i("User profile already exists for email: $email")
+            }
         }
         _loginFlow.value = result
     }

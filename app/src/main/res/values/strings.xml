@@ -4,7 +4,13 @@
     <string name="text_Title">Title</string>
     <string name="text_titleHint">Enter Title</string>
     <string name="runTitle">Welcome Hun</string>
-    <string name="runSubtitle">How far did you run?</string>
+    <string name="runSubtitle">
+        Please input the amount ran below
+        and this will be added
+        to your run report. \n\nYou can
+        check out your progress
+        in the option menu
+    </string>
     <string name="runButton">Add Distance</string>
     <string name="kilometre">kilometre</string>
     <string name="metre">metre</string>
@@ -44,5 +50,13 @@
     <string name="home">Home</string>
     <string name="logout">Logout</string>
     <string name="badge_image">Badge Image</string>
+
+    //Settings
+    <string name="settings_title">Settings</string>
+    <string name="contact_email">run-hun@gmail.com</string>
+    <string name="contact_phone">+123 456 7890</string>
+    <string name="contact_address">Example Street, World, Universe</string>
+    <string name="contact_important_info">Please have fun and run, but be safe!</string>
+
 </resources>
 
