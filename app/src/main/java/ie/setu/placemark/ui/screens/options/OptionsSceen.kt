@@ -57,12 +57,12 @@ fun OptionsScreen(
                     text = "Achievements",
                     onClick = { navController.navigate(Achievements.route) }
                 )
-                OptionCard(
-                    icon = painterResource(id = R.drawable.ic_achievements),
-                    contentDescription = "Statistics Icon",
-                    text = "Statistics",
-                    onClick = { navController.navigate("statistics") }
-                )
+//                OptionCard(
+//                    icon = painterResource(id = R.drawable.ic_achievements),
+//                    contentDescription = "Statistics Icon",
+//                    text = "Statistics",
+//                    onClick = { navController.navigate("statistics") }
+//                )
                 OptionCard(
                     icon = painterResource(id = R.drawable.ic_settings),
                     contentDescription = "Settings Icon",
