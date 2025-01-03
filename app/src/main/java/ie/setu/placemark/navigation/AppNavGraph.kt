@@ -20,6 +20,7 @@ import ie.setu.placemark.ui.screens.report.ReportScreen
 import ie.setu.placemark.ui.screens.run.RunScreen
 import ie.setu.placemark.ui.screens.settings.SettingsScreen
 import ie.setu.placemark.ui.screens.settings.SettingsViewModel
+import ie.setu.placemark.ui.screens.map.MapScreen
 import ie.setu.placemark.ui.theme.ThemeViewModel
 
 @Composable
@@ -121,6 +122,11 @@ fun NavHostProvider(
                     navController.navigateToRunDetails(runId)
                 }
             )
+        }
+
+        composable(route = Map.route) {
+            //call our 'Map' Screen Here
+            MapScreen()
         }
     }
 }

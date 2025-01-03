@@ -119,4 +119,12 @@ dependencies {
     //DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
+    //Location & Maps
+    implementation(libs.play.services.location)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+
+    //Accompanist (Permission)
+    implementation(libs.accompanist.permissions)
+
 }
