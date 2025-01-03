@@ -6,6 +6,7 @@ Run is an Android application for tracking and managing exercise details. The ap
 This section outlines the key functionalities of the application, including its components, persistence mechanisms, user experience (UX) features, developer experience (DX) improvements, and integration with third-party libraries and APIs.
 
 ### Core Functionalities
+
 1. CRUD for Models 
    - Description: Supports full Create, Read, Update, and Delete operations for Run and User models. 
    - Implementation: Data is stored and retrieved from Firebase Firestore with optional local caching through Room or temporary JSON storage. 
@@ -40,6 +41,7 @@ This section outlines the key functionalities of the application, including its 
    - Description: Includes custom UI elements such as navigation bars (top and bottom), dynamic graphs, and image carousels for an enhanced user experience.
 
 ### Persistence Mechanisms
+
 1. Firebase Firestore 
    - Description: Serves as the primary backend for storing User and Run data, ensuring real-time sync across devices.
    
@@ -50,6 +52,7 @@ This section outlines the key functionalities of the application, including its 
    - Description: Stores lightweight settings like theme and unit preferences persistently.
 
 ### User Experience (UX)
+
 1. Navigation 
    - Provides seamless navigation via a top and bottom app bar. 
    - Includes navigation to all core screens: Home, Reports, and Profile.
@@ -65,6 +68,7 @@ This section outlines the key functionalities of the application, including its 
    - Ensures a stable UX through versioned releases: v1.0.0, v2.0.0, and beyond.
    
 ### Developer Experience (DX)
+
 1. MVVM Design Pattern 
    - Utilizes the Model-View-ViewModel (MVVM) architecture to separate concerns and facilitate maintainability.
 
@@ -75,6 +79,7 @@ This section outlines the key functionalities of the application, including its 
    - Maintains a clean and well-documented commit history for easier collaboration and version control.
 
 ### Third-Party Libraries and APIs
+
 1. Firebase:
    - Authentication (firebase.auth, firebase.auth.ktx). 
    - Firestore Database (firebase.firestore).
