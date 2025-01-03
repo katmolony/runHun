@@ -34,7 +34,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
             .padding(top = 48.dp,)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.run_logo),
+                painter = painterResource(id = R.drawable.runner),
                 contentDescription = "Run Logo",
                 modifier = Modifier.size(350.dp)
             )

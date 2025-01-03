@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -159,7 +158,7 @@ fun HeadingLogoComponent() {
                 .fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.run_logo),
+                painter = painterResource(id = R.drawable.runner),
                 contentDescription = "rose image",
                 modifier = Modifier
                     .size(180.dp)
