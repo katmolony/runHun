@@ -58,11 +58,15 @@ fun NavHostProvider(
             )
         }
 
+//        composable(route = Settings.route) {
+//            SettingsScreen(
+//                modifier = modifier,
+//                settingsViewModel = SettingsViewModel(themeViewModel)
+//            )
+//        }
+
         composable(route = Settings.route) {
-            SettingsScreen(
-                modifier = modifier,
-                settingsViewModel = SettingsViewModel(themeViewModel)
-            )
+            SettingsScreen(modifier = modifier)
         }
 
         composable(route = About.route) {

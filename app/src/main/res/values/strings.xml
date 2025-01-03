@@ -44,5 +44,9 @@
     <string name="home">Home</string>
     <string name="logout">Logout</string>
     <string name="badge_image">Badge Image</string>
+
+    //Settings
+    <string name="settings_title">Settings</string>
+
 </resources>
 

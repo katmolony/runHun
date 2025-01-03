@@ -110,9 +110,6 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Button(onClick = { themeViewModel.toggleTheme() }) {
-                    Text(text = if (isDarkTheme) "Switch to Light Theme" else "Switch to Dark Theme")
-                }
             }
         }
     }
