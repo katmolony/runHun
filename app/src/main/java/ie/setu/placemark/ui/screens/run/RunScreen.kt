@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,10 +34,13 @@ import ie.setu.placemark.ui.screens.report.ReportViewModel
 
 @Composable
 fun RunScreen(modifier: Modifier = Modifier,
-              reportViewModel: ReportViewModel = hiltViewModel())
+              reportViewModel: ReportViewModel = hiltViewModel(),
+              runViewModel: RunViewModel = hiltViewModel()
+)
 {
 
-    var unitType by remember { mutableStateOf("kilometres") }
+
+    val unitType by runViewModel.unitType.collectAsState()
     var distanceAmount by remember { mutableIntStateOf(10) }
     var runMessage by remember { mutableStateOf("Go Hun!") }
     var totalDistance by remember { mutableIntStateOf(0) }
@@ -58,18 +63,20 @@ fun RunScreen(modifier: Modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
             )
             {
-                AmountPicker(
-                    onPaymentAmountChange = { distanceAmount = it }
+//                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "How many $unitType did you run?",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.weight(2f)
                 )
-                Spacer(modifier.weight(1f))
-                RadioButtonGroup(
-                    modifier = modifier,
-                    onPaymentTypeChange = { unitType = it }
+                AmountPicker(
+                    onPaymentAmountChange = { distanceAmount = it },
+                    modifier = Modifier.weight(1f)
                 )
             }
-            ProgressBar(
-                modifier = modifier,
-                totalDistance = totalDistance)
+//            ProgressBar(
+//                modifier = modifier,
+//                totalDistance = totalDistance)
             MessageInput(
                 modifier = modifier,
                 onMessageChange = { runMessage = it }
@@ -80,7 +87,7 @@ fun RunScreen(modifier: Modifier = Modifier,
                     distanceAmount = distanceAmount,
                     message = runMessage),
 //                runs = runs,
-                onTotalDistanceChange = { totalDistance = it }
+//                onTotalDistanceChange = { totalDistance = it }
             )
         }
     }
@@ -128,9 +135,9 @@ fun PreviewRunScreen(modifier: Modifier = Modifier,
                     onPaymentAmountChange = { distanceAmount = it }
                 )
             }
-            ProgressBar(
-                modifier = modifier,
-                totalDistance = totalDistance)
+//            ProgressBar(
+//                modifier = modifier,
+//                totalDistance = totalDistance)
             MessageInput(
                 modifier = modifier,
                 onMessageChange = { runMessage = it }
@@ -140,7 +147,7 @@ fun PreviewRunScreen(modifier: Modifier = Modifier,
                 run = RunModel(unitType = unitType,
                     distanceAmount = distanceAmount,
                     message = runMessage),
-                onTotalDistanceChange = { totalDistance = it }
+//                onTotalDistanceChange = { totalDistance = it }
             )
         }
     }

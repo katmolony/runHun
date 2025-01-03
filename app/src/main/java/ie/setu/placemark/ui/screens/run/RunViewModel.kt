@@ -8,6 +8,8 @@ import ie.setu.placemark.data.model.RunModel
 import ie.setu.placemark.data.api.RetrofitRepository
 import ie.setu.placemark.firebase.services.AuthService
 import ie.setu.placemark.firebase.services.FirestoreService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
@@ -22,10 +24,15 @@ constructor(
     var error = mutableStateOf(Exception())
     var isLoading = mutableStateOf(false)
 
-//    fun insert(run: RunModel)
-//            = viewModelScope.launch {
-//                repository.insert(run)
-//    }
+    private val _unitType = MutableStateFlow("kilometres")
+    val unitType: StateFlow<String> = _unitType
+
+    init {
+        viewModelScope.launch {
+            val userProfile = repository.getUserProfile(authService.email!!)
+            _unitType.value = userProfile?.preferredUnit ?: "kilometres"
+        }
+    }
 
     fun insert(run: RunModel) =
         viewModelScope.launch {

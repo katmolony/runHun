@@ -46,7 +46,7 @@ fun RunButton(
     run: RunModel,
     runViewModel: RunViewModel = hiltViewModel(),
     reportViewModel: ReportViewModel = hiltViewModel(),
-    onTotalDistanceChange: (Int) -> Unit
+//    onTotalDistanceChange: (Int) -> Unit
 )
 {
     var totalDistance by remember { mutableIntStateOf(0) }
@@ -67,7 +67,7 @@ fun RunButton(
             onClick = {
             if(totalDistance + run.distanceAmount <= 400) {
                 totalDistance+=run.distanceAmount
-                onTotalDistanceChange(totalDistance)
+//                onTotalDistanceChange(totalDistance)
                 runViewModel.insert(run)
                 Timber.i("Run info : $run")
                 Timber.i("Run List info : ${runs.toList()}")
@@ -89,29 +89,29 @@ fun RunButton(
         }
 
         Spacer(modifier.weight(1f))
-        Text(
-
-            buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.Black
-                    )
-                ) {
-                    append(stringResource(R.string.total) + " ")
-                }
-
-
-                withStyle(
-                    style = SpanStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.secondary)
-                ) {
-                    append(totalDistance.toString())
-                }
-            })
+//        Text(
+//
+//            buildAnnotatedString {
+//                withStyle(
+//                    style = SpanStyle(
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 20.sp,
+//                        color = Color.Black
+//                    )
+//                ) {
+//                    append(stringResource(R.string.total) + " ")
+//                }
+//
+//
+//                withStyle(
+//                    style = SpanStyle(
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 20.sp,
+//                        color = MaterialTheme.colorScheme.secondary)
+//                ) {
+//                    append(totalDistance.toString())
+//                }
+//            })
     }
     //Required to refresh our 'totalRan'
     if(isError)

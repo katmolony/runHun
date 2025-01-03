@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,21 +16,23 @@ import ie.setu.placemark.ui.theme.RunHunTheme
 
 @Composable
 fun AmountPicker(
+    modifier: Modifier = Modifier,
     onPaymentAmountChange: (Int) -> Unit
 ) {
-    val possibleValues = listOf("1", "3", "5", "10", "15", "24","44")
+    val possibleValues = listOf("1", "3", "5", "10", "15", "24", "44")
     var pickerValue by remember { mutableStateOf(possibleValues[0]) }
 
     ListItemPicker(
         label = { it },
         dividersColor = MaterialTheme.colorScheme.primary,
-        textStyle = TextStyle(Color.Black,20.sp),
+        textStyle = TextStyle(Color.Black, 20.sp),
         value = pickerValue,
         onValueChange = {
             pickerValue = it
             onPaymentAmountChange(pickerValue.toInt())
         },
-        list = possibleValues
+        list = possibleValues,
+        modifier = modifier
     )
 }
 
@@ -37,6 +40,6 @@ fun AmountPicker(
 @Composable
 fun PickerPreview() {
     RunHunTheme {
-        AmountPicker(onPaymentAmountChange = {})
+        AmountPicker(modifier = Modifier, onPaymentAmountChange = {})
     }
 }
