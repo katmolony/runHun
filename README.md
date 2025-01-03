@@ -115,6 +115,17 @@ Beyond the technical learning, this project reinforced my passion for problem-so
 
 This experience has strengthened my skills in software development and boosted my confidence in tackling complex projects. It has also reaffirmed my enthusiasm for mobile development and my eagerness to keep exploring new technologies in the future.
 
+## References
+
+1. Kotlin Documentation. Working with Coroutines in Kotlin. Retrieved from https://kotlinlang.org/docs/coroutines-overview.html
+2. Android Developers Guide. Jetpack Compose Navigation. Retrieved from https://developer.android.com/jetpack/compose/navigation
+3. Stack Overflow. How to Persist User Preferences Using DataStore. Retrieved from https://stackoverflow.com/questions
+4. Coil Documentation. Using Coil for Image Loading in Android. Retrieved from https://coil-kt.github.io/coil/
+5. Firebase Documentation. Integrating Firebase Authentication with Android. Retrieved from https://firebase.google.com/docs/auth
+6. PhilJay’s MPAndroidChart GitHub. Creating Custom Graphs in Android. Retrieved from https://github.com/PhilJay/MPAndroidChart
+7. Room Database Guide. Setting up Room with Kotlin. Retrieved from https://developer.android.com/training/data-storage/room
+8. Stack Overflow. Best Practices for MVVM Architecture in Android. Retrieved from https://stackoverflow.com/questions
+
 ## Installation
 
 1. Clone the repository:
